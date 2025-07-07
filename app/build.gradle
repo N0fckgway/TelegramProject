@@ -19,8 +19,11 @@ dependencies {
     // Use JUnit Jupiter for testing.
     testImplementation libs.junit.jupiter
 
+    implementation 'org.projectlombok:lombok:1.18.24'
+    implementation 'org.telegram:telegrambots:6.1.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
+    implementation 'ch.qos.logback:logback-classic:1.4.14'
+    implementation 'org.springframework.boot:spring-boot:3.5.2'
     // This dependency is used by the application.
     implementation libs.guava
 }
@@ -34,7 +37,7 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.example.App'
+    mainClass = 'org.telebot.TelegramBot'
 }
 
 tasks.named('test') {
