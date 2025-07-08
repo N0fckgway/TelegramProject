@@ -4,6 +4,9 @@ package org.telebot.connector;
 
 
 import lombok.Getter;
+import org.telebot.command.Command;
+import org.telebot.command.runner.Runner;
+import org.telebot.data.exception.InvalidCommandException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -14,14 +17,14 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
 
 @Getter
 public class ConnectBot extends TelegramLongPollingBot {
     private String botToken;
     private String username;
-    private final ConcurrentMap<Long, String> listUsers = new ConcurrentHashMap<>();
+
+
 
 
 
@@ -66,34 +69,22 @@ public class ConnectBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            String message = update.getMessage().getText();
-            long chat_id = update.getMessage().getChatId();
-            String firstName = update.getMessage().getFrom().getFirstName();
-            switch (message) {
-                case ("/start"):
-                    startCommandMessage(chat_id, firstName);
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + message);
-            }
+            executeCommand(update);
         }
     }
 
-    public void startCommandMessage(Long longId, String firstName) {
-        String start = "Приветствую " + firstName + ", теперь ты мой новый друг! Я тебе предоставлю возможность не забывать" +
-                " о днях рождениях своих родных, друзей и вовсе очень близких тебе людей! " +
-                "Давай для начала с тобой познакомимся, напиши как мне к тебе обращаться! ";
-        sendMessage(longId, start);
+    public void executeCommand(Update update) {
+        Runner runner = new Runner();
+        String message = update.getMessage().getText();
+        Command command = new Command(message);
+        if (message.equals(command.getName())) {
+            command.setName(message);
+        } else throw new InvalidCommandException(this, "Команда не в коллекции!");
+        runner.registrationCommand();
+        runner.commandCollection.get(command.getName()).apply(update);
+
+
     }
 
-    public void sendMessage(Long chatId, String text) {
-        String chatIdStr = String.valueOf(chatId);
-        SendMessage sendMessage = new SendMessage(chatIdStr, text);
-        try {
-            execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e.getMessage());
-        }
-    }
 
 }
