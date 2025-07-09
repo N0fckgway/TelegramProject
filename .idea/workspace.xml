@@ -7,7 +7,8 @@
     <list default="true" id="154ffff4-1248-4d04-80f5-f204dfa9e39c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Setting.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Setting.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Start.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +24,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -87,7 +89,7 @@
       <option name="presentableId" value="Default" />
       <updated>1751908023449</updated>
       <workItem from="1751908024482" duration="843000" />
-      <workItem from="1752042190292" duration="11266000" />
+      <workItem from="1752042190292" duration="14490000" />
     </task>
     <servers />
   </component>

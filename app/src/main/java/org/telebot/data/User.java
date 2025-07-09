@@ -25,14 +25,6 @@ public class User {
         this.name = name;
     }
 
-    public User(LocalDateTime birthday) {
-        this.birthday = birthday;
-    }
-
-    public User(Integer age) {
-        this.age = age;
-    }
-
     public void validate() throws InvalidDataException {
         if (name == null && getName().isEmpty()) throw new InvalidDataException(this, "Имя не может быть null или пустым. Перезапишите значение!");
         if (age == null && getAge() < 0) throw new InvalidDataException(this, "Возраст не может быть null или меньше 0. Перезапишите значение!");

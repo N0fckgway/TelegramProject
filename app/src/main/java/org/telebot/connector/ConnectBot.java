@@ -66,6 +66,7 @@ public class ConnectBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             executeCommand(update);
+
         }
     }
 
