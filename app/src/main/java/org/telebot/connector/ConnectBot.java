@@ -4,13 +4,12 @@ package org.telebot.connector;
 
 
 import lombok.Getter;
-import org.telebot.command.Command;
+import org.telebot.command.runner.Command;
 import org.telebot.command.runner.Runner;
 import org.telebot.data.exception.InvalidCommandException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,9 +22,6 @@ import java.util.Properties;
 public class ConnectBot extends TelegramLongPollingBot {
     private String botToken;
     private String username;
-
-
-
 
 
     public void setBot() throws IOException {
@@ -81,7 +77,7 @@ public class ConnectBot extends TelegramLongPollingBot {
             command.setName(message);
         } else throw new InvalidCommandException(this, "Команда не в коллекции!");
         runner.registrationCommand();
-        runner.commandCollection.get(command.getName()).apply(update);
+        runner.commands.get(command.getName()).apply(update);
 
 
     }
