@@ -3,6 +3,7 @@ package org.telebot.command;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.units.qual.A;
+import org.telebot.buttons.Profile;
 import org.telebot.command.interfaces.CallbackHandleQuery;
 import org.telebot.command.interfaces.ExecuteCommand;
 import org.telebot.command.runner.Command;
@@ -35,7 +36,6 @@ public class Setting extends ConnectBot implements ExecuteCommand, CallbackHandl
         Long chatId = update.getMessage().getChatId();
         try {
             execute(inlineKeyboardResponse(chatId));
-
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
@@ -87,18 +87,19 @@ public class Setting extends ConnectBot implements ExecuteCommand, CallbackHandl
 
     @Override
     public void handleInlineButtons(Update update) {
-        if (update.hasCallbackQuery()) {
-            CallbackQuery callbackQuery = update.getCallbackQuery();
-            String answer = callbackQuery.getData();
+        CallbackQuery callbackQuery = update.getCallbackQuery();
+        String answer = callbackQuery.getData();
 
-            switch (answer) {
-                case ("PROFIlE"):
+        switch (answer) {
+            case ("PROFIlE"):
+                Profile.getProfile().applyButton(update);
+                break;
+            case ("FRIENDS"):
                     ///
-                case ("FRIENDS"):
+                break;
+            case ("NOTIFICATIONS"):
                     ///
-                case ("NOTIFICATIONS"):
-                    ///
-            }
+                break;
         }
     }
 }

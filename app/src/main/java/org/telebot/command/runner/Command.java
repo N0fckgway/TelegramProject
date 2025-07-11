@@ -26,9 +26,6 @@ public class Command {
         this.name = name;
     }
 
-    public Command getCommand() {
-        return new Command(name, description);
-    }
 
     public void register(String name, Command command) {
         commandCollection.put(name, command);

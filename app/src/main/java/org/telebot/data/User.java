@@ -5,18 +5,18 @@ import lombok.Setter;
 import lombok.ToString;
 import org.telebot.data.exception.InvalidDataException;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.Period;
+
 @Getter
 @Setter
 @ToString
 public class User {
     private String name;
-    private Integer age;
-    private LocalDateTime birthday;
+    private LocalDate birthday;
 
-    public User(String name, int age, LocalDateTime birthday) {
+    public User(String name, LocalDate birthday) {
         this.name = name;
-        this.age = age;
         this.birthday = birthday;
 
     }
@@ -26,17 +26,13 @@ public class User {
     }
 
     public void validate() throws InvalidDataException {
-        if (name == null && getName().isEmpty()) throw new InvalidDataException(this, "Имя не может быть null или пустым. Перезапишите значение!");
-        if (age == null && getAge() < 0) throw new InvalidDataException(this, "Возраст не может быть null или меньше 0. Перезапишите значение!");
+        if (name == null || getName().isEmpty()) throw new InvalidDataException(this, "Имя не может быть null или пустым. Перезапишите значение!");
         if (birthday == null) throw new InvalidDataException(this, "День рождения должен быть указан корректно. Перезапишите значение!");
 
     }
 
-
-
-
-
-
-
-
+    public Integer getAge() {
+        if (birthday == null) return 0;
+        return Period.between(birthday, LocalDate.now()).getYears();
+    }
 }

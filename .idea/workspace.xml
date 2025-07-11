@@ -5,10 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="154ffff4-1248-4d04-80f5-f204dfa9e39c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/Profile.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/enums/UserStatus.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Setting.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Setting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Runner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/exception/InvalidCommandException.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/exception/InvalidCommandException.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +28,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
         <option value="Interface" />
       </list>
@@ -52,13 +58,18 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "application.passwordSafe",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/resources" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="TelegramProject.app.test" />
@@ -89,7 +100,8 @@
       <option name="presentableId" value="Default" />
       <updated>1751908023449</updated>
       <workItem from="1751908024482" duration="843000" />
-      <workItem from="1752042190292" duration="14490000" />
+      <workItem from="1752042190292" duration="34373000" />
+      <workItem from="1752180507416" duration="14672000" />
     </task>
     <servers />
   </component>

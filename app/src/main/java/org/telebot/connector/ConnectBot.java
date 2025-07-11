@@ -4,12 +4,17 @@ package org.telebot.connector;
 
 
 import lombok.Getter;
+import org.telebot.buttons.Profile;
 import org.telebot.command.runner.Command;
 import org.telebot.command.runner.Runner;
+import org.telebot.data.User;
 import org.telebot.data.exception.InvalidCommandException;
+import org.telebot.data.exception.InvalidDataException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +31,7 @@ public class ConnectBot extends TelegramLongPollingBot {
 
     public void setBot() throws IOException {
         Properties properties = new Properties();
-        try (InputStream inputStream = Files.newInputStream(Paths.get("/Users/n0fckgway/Desktop/TelegramProject/.gradle/properties/apiBot.properties"))) {
+        try (InputStream inputStream = Files.newInputStream(Paths.get("/Users/n0fckgway/Desktop/TelegramProject/app/src/main/resources/properties/apiBot.properties"))) {
             properties.load(inputStream);
 
         } catch (IOException e) {
@@ -67,6 +72,10 @@ public class ConnectBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             executeCommand(update);
 
+        } else if (update.hasCallbackQuery()) {
+
+
+
         }
     }
 
@@ -74,13 +83,30 @@ public class ConnectBot extends TelegramLongPollingBot {
         Runner runner = new Runner();
         String message = update.getMessage().getText();
         Command command = new Command(message);
-        if (message.equals(command.getName())) {
-            command.setName(message);
-        } else throw new InvalidCommandException(this, "Команда не в коллекции!");
-        runner.registrationCommand();
+        runner.registrationCommands();
+        if (!runner.commands.containsKey(message)) {
+            String response = "<strong>Такой команды не существует!</strong>\nСписок команд можно посмотреть здесь - /help";
+            sendMessageOfMistake(response, update);
+        }
         runner.commands.get(command.getName()).apply(update);
 
+    }
 
+    public void executeButton(Update update) {
+        Runner runner = new Runner();
+        String data = update.getCallbackQuery().getData();
+
+    }
+
+    public void sendMessageOfMistake(String response, Update update) {
+        Long chatId = update.getMessage().getChatId();
+        SendMessage sendMessage = new SendMessage(String.valueOf(chatId), response);
+        sendMessage.setParseMode(ParseMode.HTML);
+        try {
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
