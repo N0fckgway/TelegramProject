@@ -1,5 +1,7 @@
 package org.telebot.command.runner;
 
+import org.telebot.buttons.Friends;
+import org.telebot.buttons.Notification;
 import org.telebot.buttons.Profile;
 import org.telebot.command.Help;
 import org.telebot.command.Setting;
@@ -21,8 +23,10 @@ public class Runner {
 
     }
 
-    public void registrationButton(Update update) {
+    public void registrationButton() {
         buttons.put("PROFILE", new Profile());
+        buttons.put("FRIENDS", new Friends());
+        buttons.put("NOTIFICATIONS", new Notification());
     }
 
 }

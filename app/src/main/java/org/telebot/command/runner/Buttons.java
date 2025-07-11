@@ -1,8 +1,7 @@
-package org.telebot.buttons;
+package org.telebot.command.runner;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.telebot.command.interfaces.ExecuteButton;
 
 import java.util.HashMap;
 

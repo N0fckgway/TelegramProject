@@ -27,6 +27,7 @@ public class Command {
     }
 
 
+
     public void register(String name, Command command) {
         commandCollection.put(name, command);
     }

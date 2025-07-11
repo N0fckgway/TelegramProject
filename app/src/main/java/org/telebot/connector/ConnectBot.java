@@ -4,13 +4,10 @@ package org.telebot.connector;
 
 
 import lombok.Getter;
-import org.telebot.buttons.Profile;
-import org.telebot.command.runner.Command;
 import org.telebot.command.runner.Runner;
 import org.telebot.data.User;
-import org.telebot.data.exception.InvalidCommandException;
-import org.telebot.data.exception.InvalidDataException;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -27,6 +24,7 @@ import java.util.Properties;
 public class ConnectBot extends TelegramLongPollingBot {
     private String botToken;
     private String username;
+
 
 
     public void setBot() throws IOException {
@@ -72,9 +70,18 @@ public class ConnectBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             executeCommand(update);
 
+
+
         } else if (update.hasCallbackQuery()) {
+            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+            try {
+                execute(answerCallbackQuery);
+            } catch (TelegramApiException e) {
+                throw new RuntimeException(e);
+            }
 
-
+            executeButton(update);
 
         }
     }
@@ -82,19 +89,24 @@ public class ConnectBot extends TelegramLongPollingBot {
     public void executeCommand(Update update) {
         Runner runner = new Runner();
         String message = update.getMessage().getText();
-        Command command = new Command(message);
         runner.registrationCommands();
         if (!runner.commands.containsKey(message)) {
             String response = "<strong>Такой команды не существует!</strong>\nСписок команд можно посмотреть здесь - /help";
             sendMessageOfMistake(response, update);
+
         }
-        runner.commands.get(command.getName()).apply(update);
+        if (runner.commands.get(message) != null) {
+            runner.commands.get(message).apply(update);
+        }
+
 
     }
 
     public void executeButton(Update update) {
         Runner runner = new Runner();
         String data = update.getCallbackQuery().getData();
+        runner.registrationButton();
+        runner.buttons.get(data).applyButton(update);
 
     }
 

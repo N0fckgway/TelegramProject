@@ -20,12 +20,12 @@ public class Help extends ConnectBot implements ExecuteCommand {
 
     @Override
     public void apply(Update update) {
-        User user = new User(update.getMessage().getFrom().getFirstName());
+        String fullName = (update.getMessage().getFrom().getLastName() == null) ? update.getMessage().getFrom().getFirstName() : update.getMessage().getFrom().getFirstName() + " " + update.getMessage().getFrom().getLastName();
         Command command = getCommand();
         Long chatId = update.getMessage().getChatId();
         getCommand().commandFill();
         String message = "<b>🆘Помощь по боту!</b>\n\n" +
-                user.getName() + ", вот что я умею:\n\n" +
+                fullName + ", вот что я умею:\n\n" +
                 "<b>🚩Основные команды:</b>\n\n" +
                 command.commandPrintln(update) +
                 "\n<b>💡Как работает бот?</b>\n\n" +
@@ -40,7 +40,7 @@ public class Help extends ConnectBot implements ExecuteCommand {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            throw new  RuntimeException();
         }
 
     }

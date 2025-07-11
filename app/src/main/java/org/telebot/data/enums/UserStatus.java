@@ -1,4 +1,4 @@
-package org.telebot.buttons.enums;
+package org.telebot.data.enums;
 
 public enum UserStatus {
     WAIT_FOR_NAME,
