@@ -33,7 +33,7 @@ public class Help extends ConnectBot implements ExecuteCommand {
                 "В настройках ты сможешь настроить уведомления, я даже могу напоминать тебе каждый день, сколько дней осталось до твоего дня рождения!\n" +
                 "Никаких забытых поздравлений — только тёплые слова вовремя! 😊 \n\n" +
                 "<b>📧Есть вопросы или предложения как улучшить мой проект!?</b>\n" +
-                "<strong>Пиши сюда: @N0fckgway</strong>"; ///Отформатировать текст!
+                "<strong>Пиши сюда: @N0fckgway</strong>";
         SendMessage sendMessage = new SendMessage(String.valueOf(chatId), message);
         sendMessage.setParseMode(ParseMode.HTML);
 
@@ -44,4 +44,6 @@ public class Help extends ConnectBot implements ExecuteCommand {
         }
 
     }
+
+
 }

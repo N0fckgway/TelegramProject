@@ -17,7 +17,6 @@ import java.util.Map;
 public class User {
     private String fullName;
     private LocalDate birthday;
-    private static final Map<Long, UserStatus> userStatus = new HashMap<>();
 
     public User(String fullName, LocalDate birthday) {
         this.fullName = fullName;

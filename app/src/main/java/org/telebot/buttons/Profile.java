@@ -13,9 +13,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class Profile extends ConnectBot implements ExecuteButton {
 
 
-
-
-
     @Override
     public void applyButton(Update update) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -30,7 +27,6 @@ public class Profile extends ConnectBot implements ExecuteButton {
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 

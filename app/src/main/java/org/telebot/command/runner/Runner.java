@@ -3,6 +3,7 @@ package org.telebot.command.runner;
 import org.telebot.buttons.Friends;
 import org.telebot.buttons.Notification;
 import org.telebot.buttons.Profile;
+import org.telebot.buttons.RegistrationUser;
 import org.telebot.command.Help;
 import org.telebot.command.Setting;
 import org.telebot.command.Start;
@@ -27,6 +28,9 @@ public class Runner {
         buttons.put("PROFILE", new Profile());
         buttons.put("FRIENDS", new Friends());
         buttons.put("NOTIFICATIONS", new Notification());
+        buttons.put("REGISTRATION", new RegistrationUser());
+        buttons.put("NOT_REGISTRATION", new RegistrationUser());
+
     }
 
 }
