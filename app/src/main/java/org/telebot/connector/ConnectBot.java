@@ -10,6 +10,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
@@ -29,7 +30,7 @@ public class ConnectBot extends TelegramLongPollingBot {
 
     public void setBot() throws IOException {
         Properties properties = new Properties();
-        try (InputStream inputStream = Files.newInputStream(Paths.get("/Users/n0fckgway/Desktop/TelegramProject/app/src/main/resources/properties/apiBot.properties"))) {
+        try (InputStream inputStream = Files.newInputStream(Paths.get("TelegramProject/app/src/main/resources/properties/apiBot.properties"))) {
             properties.load(inputStream);
 
         } catch (IOException e) {
@@ -77,6 +78,7 @@ public class ConnectBot extends TelegramLongPollingBot {
             answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
             try {
                 execute(answerCallbackQuery);
+
             } catch (TelegramApiException e) {
                 throw new RuntimeException(e);
             }

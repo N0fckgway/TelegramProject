@@ -9,7 +9,6 @@ import org.telebot.command.Setting;
 import org.telebot.command.Start;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.command.interfaces.ExecuteCommand;
-import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.HashMap;
 
@@ -29,7 +28,7 @@ public class Runner {
         buttons.put("FRIENDS", new Friends());
         buttons.put("NOTIFICATIONS", new Notification());
         buttons.put("REGISTRATION", new RegistrationUser());
-        buttons.put("NOT_REGISTRATION", new RegistrationUser());
+
 
     }
 

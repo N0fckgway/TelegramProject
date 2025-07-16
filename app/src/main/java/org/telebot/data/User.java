@@ -17,6 +17,15 @@ import java.util.Map;
 public class User {
     private String fullName;
     private LocalDate birthday;
+    private static final Map<Long, User> users = new HashMap<>();
+
+    public static void saveUser(Long chatId, User user) {
+        users.put(chatId, user);
+    }
+
+    public static User getUser(Long chatId) {
+        return users.get(chatId);
+    }
 
     public User(String fullName, LocalDate birthday) {
         this.fullName = fullName;
@@ -28,8 +37,7 @@ public class User {
     }
 
 
-
-    public static User getUser(String fullName) {
-        return new User(fullName);
+    public int getAge() {
+        return Period.between(birthday, LocalDate.now()).getYears();
     }
 }

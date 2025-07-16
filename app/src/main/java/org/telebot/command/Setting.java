@@ -59,17 +59,23 @@ public class Setting extends ConnectBot implements ExecuteCommand, InlineKeyboar
 
         /// Вторая кнопка
         InlineKeyboardButton secondButton = new InlineKeyboardButton();
-        secondButton.setText("👥 Мои друзья");
-        secondButton.setCallbackData("FRIENDS");
+        secondButton.setText("🧐Регистрация");
+        secondButton.setCallbackData("REGISTRATION");
 
         /// Третья кнопка
         InlineKeyboardButton thirdButton = new InlineKeyboardButton();
-        thirdButton.setText("⏰ Уведомления");
-        thirdButton.setCallbackData("NOTIFICATIONS");
+        thirdButton.setText("👥 Мои друзья");
+        thirdButton.setCallbackData("FRIENDS");
+
+        /// Четвертая кнопка
+        InlineKeyboardButton fourthButton = new InlineKeyboardButton();
+        fourthButton.setText("⏰ Уведомления");
+        fourthButton.setCallbackData("NOTIFICATIONS");
 
         firstRowButtons.add(firstButton);
         firstRowButtons.add(secondButton);
         secondRowButtons.add(thirdButton);
+        secondRowButtons.add(fourthButton);
 
         rowOfButtons.add(firstRowButtons);
         rowOfButtons.add(secondRowButtons);

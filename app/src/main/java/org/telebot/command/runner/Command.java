@@ -37,10 +37,8 @@ public class Command {
         register("/setting", new Setting().getCommand());
         register("/help", new Help().getCommand());
         register("/add", new Add().getCommand());
-        register("/show", new Show().getCommand());
         register("/delete", new Delete().getCommand());
         register("/edit", new Edit().getCommand());
-        register("/next", new Next().getCommand());
         return commandCollection;
     }
 

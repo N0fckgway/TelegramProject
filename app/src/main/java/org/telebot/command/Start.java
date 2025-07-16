@@ -9,6 +9,8 @@ import org.telebot.connector.ConnectBot;
 import org.telebot.data.User;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -19,7 +21,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Start extends ConnectBot implements ExecuteCommand, InlineKeyboardResponse {
+public class Start extends ConnectBot implements ExecuteCommand {
     public Command command;
 
     public Command getCommand() {
@@ -33,49 +35,16 @@ public class Start extends ConnectBot implements ExecuteCommand, InlineKeyboardR
                 "Теперь ты — мой новый друг! 🎉" +
                 "\n\n" +
                 "<b>Я помогу тебе не забывать о днях рождениях родных, друзей и всех, кто тебе дорог.</b>\n\n" +
-                "<b>Чтобы начать</b>, ты можешь зарегистрироваться <strong>(так профиль у тебя будет заполнен сразу!).</strong>\n\n" +
-                "Но если ты не хочешь делать это прямо сейчас, то перейди\n" +
-                "<strong>/setting -> 👀Мой профиль</strong>, и я попрошу тебя это сделать! 😊";
-
+                "<b>Чтобы начать</b>, нажми на эту команду /help - она тебе выведет краткую справку обо мне!";
         Long chatId = update.getMessage().getChatId();
+        SendMessage sendMessage = new SendMessage(String.valueOf(chatId), start);
+        sendMessage.setParseMode(ParseMode.HTML);
         try {
-            execute(inlineKeyboardResponse(chatId, start));
+            execute(sendMessage);
 
         } catch (TelegramApiException e) {
             throw new RuntimeException();
         }
-
-    }
-
-
-    @Override
-    public SendMessage inlineKeyboardResponse(long id, String text) {
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setText(text);
-        sendMessage.setChatId(id);
-        sendMessage.setParseMode(ParseMode.HTML);
-        InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
-        InlineKeyboardButton firstButton = new InlineKeyboardButton();
-        InlineKeyboardButton secondButton = new InlineKeyboardButton();
-
-        List<List<InlineKeyboardButton>> rowsButtons = new ArrayList<>();
-        List<InlineKeyboardButton> firstRowButtons = new ArrayList<>();
-
-
-        firstButton.setText("💯Да, начнем регистрацию!");
-        firstButton.setCallbackData("REGISTRATION");
-        firstRowButtons.add(firstButton);
-
-        secondButton.setText("😔Нет, начнем позже!");
-        secondButton.setCallbackData("NOT_REGISTRATION");
-        firstRowButtons.add(secondButton);
-
-        rowsButtons.add(firstRowButtons);
-        inlineKeyboardMarkup.setKeyboard(rowsButtons);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-
-
-        return sendMessage;
 
     }
 
