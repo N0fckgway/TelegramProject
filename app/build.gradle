@@ -24,6 +24,7 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.14'
     implementation 'org.springframework.boot:spring-boot:3.5.2'
     compileOnly 'org.projectlombok:lombok:1.18.32'
+    implementation 'org.postgresql:postgresql:42.7.3'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
     // This dependency is used by the application.
     implementation libs.guava
@@ -40,6 +41,15 @@ application {
     // Define the main class for the application.
     mainClass = 'org.telebot.TelegramBot'
 }
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+}
+
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.

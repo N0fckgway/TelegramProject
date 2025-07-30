@@ -15,29 +15,26 @@ import java.util.Map;
 @Setter
 @ToString
 public class User {
-    private String fullName;
+    private Long chatId;
+    private String firstName;
+    private String lastName;
+    private String userName;
+    private String phoneNumber;
     private LocalDate birthday;
+
     private static final Map<Long, User> users = new HashMap<>();
 
-    public static void saveUser(Long chatId, User user) {
-        users.put(chatId, user);
-    }
 
-    public static User getUser(Long chatId) {
-        return users.get(chatId);
-    }
-
-    public User(String fullName, LocalDate birthday) {
-        this.fullName = fullName;
+    public User(Long chatId, String firstName, String lastName, String userName, String phoneNumber, LocalDate birthday) {
+        this.chatId = chatId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userName = userName;
+        this.phoneNumber = phoneNumber;
         this.birthday = birthday;
     }
-
-    public User(String fullName) {
-        this.fullName = fullName;
-    }
-
-
     public int getAge() {
         return Period.between(birthday, LocalDate.now()).getYears();
     }
+
 }

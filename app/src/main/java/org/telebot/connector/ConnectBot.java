@@ -4,8 +4,12 @@ package org.telebot.connector;
 
 
 import lombok.Getter;
+import org.telebot.buttons.SendContact;
+import org.telebot.command.Help;
 import org.telebot.command.runner.Runner;
 import org.telebot.data.User;
+import org.telebot.data.database.DBConnector;
+import org.telebot.data.database.DBManager;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -30,7 +34,7 @@ public class ConnectBot extends TelegramLongPollingBot {
 
     public void setBot() throws IOException {
         Properties properties = new Properties();
-        try (InputStream inputStream = Files.newInputStream(Paths.get("TelegramProject/app/src/main/resources/properties/apiBot.properties"))) {
+        try (InputStream inputStream = Files.newInputStream(Paths.get("../app/src/main/resources/properties/apiBot.properties"))) {
             properties.load(inputStream);
 
         } catch (IOException e) {
@@ -71,20 +75,12 @@ public class ConnectBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             executeCommand(update);
 
-
-
         } else if (update.hasCallbackQuery()) {
-            AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
-            answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
-            try {
-                execute(answerCallbackQuery);
-
-            } catch (TelegramApiException e) {
-                throw new RuntimeException(e);
-            }
-
+            answerCallBackFunc(update);
             executeButton(update);
-
+        } else if (update.getMessage().hasContact()) {
+            SendContact sendContact = new SendContact();
+            sendContact.applyButton(update);
         }
     }
 
@@ -118,6 +114,17 @@ public class ConnectBot extends TelegramLongPollingBot {
         sendMessage.setParseMode(ParseMode.HTML);
         try {
             execute(sendMessage);
+        } catch (TelegramApiException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void answerCallBackFunc(Update update) {
+        AnswerCallbackQuery answerCallbackQuery = new AnswerCallbackQuery();
+        answerCallbackQuery.setCallbackQueryId(update.getCallbackQuery().getId());
+        try {
+            execute(answerCallbackQuery);
+
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }

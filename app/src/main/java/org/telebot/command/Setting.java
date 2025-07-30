@@ -3,7 +3,7 @@ package org.telebot.command;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.telebot.command.interfaces.ExecuteCommand;
-import org.telebot.command.interfaces.InlineKeyboardResponse;
+import org.telebot.command.interfaces.KeyboardResponse;
 import org.telebot.command.runner.Command;
 import org.telebot.connector.ConnectBot;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -13,12 +13,11 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 @Getter
 @Slf4j
-public class Setting extends ConnectBot implements ExecuteCommand, InlineKeyboardResponse {
+public class Setting extends ConnectBot implements ExecuteCommand, KeyboardResponse {
     public Command getCommand() {
         return new Command("/setting", "Вывод настроек бота!");
     }
@@ -28,18 +27,19 @@ public class Setting extends ConnectBot implements ExecuteCommand, InlineKeyboar
         Long chatId = update.getMessage().getChatId();
         String settingMessage = "🛠 <strong>Настройки:</strong>\n\n" +
                 "<i>1</i>. 👀 Мой профиль\n" +
-                "<i>2</i>. 👥 Мои друзья\n" +
-                "<i>3</i>. ⏰ Уведомления\n";
+                "<i>3</i>. 👥 Мои друзья\n" +
+                "<i>4</i>. ⏰ Уведомления\n";
+
 
         try {
-            execute(inlineKeyboardResponse(chatId, settingMessage));
+            execute(keyboardResponse(chatId, settingMessage));
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
         }
 
     }
     @Override
-    public SendMessage inlineKeyboardResponse(long chatId, String text) {
+    public SendMessage keyboardResponse(long chatId, String text) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setParseMode(ParseMode.HTML);
         sendMessage.setChatId(chatId);
@@ -57,10 +57,6 @@ public class Setting extends ConnectBot implements ExecuteCommand, InlineKeyboar
         firstButton.setText("👀 Мой профиль");
         firstButton.setCallbackData("PROFILE");
 
-        /// Вторая кнопка
-        InlineKeyboardButton secondButton = new InlineKeyboardButton();
-        secondButton.setText("🧐Регистрация");
-        secondButton.setCallbackData("REGISTRATION");
 
         /// Третья кнопка
         InlineKeyboardButton thirdButton = new InlineKeyboardButton();
@@ -73,7 +69,6 @@ public class Setting extends ConnectBot implements ExecuteCommand, InlineKeyboar
         fourthButton.setCallbackData("NOTIFICATIONS");
 
         firstRowButtons.add(firstButton);
-        firstRowButtons.add(secondButton);
         secondRowButtons.add(thirdButton);
         secondRowButtons.add(fourthButton);
 
