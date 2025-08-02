@@ -27,8 +27,8 @@ public class Setting extends ConnectBot implements ExecuteCommand, KeyboardRespo
         Long chatId = update.getMessage().getChatId();
         String settingMessage = "🛠 <strong>Настройки:</strong>\n\n" +
                 "<i>1</i>. 👀 Мой профиль\n" +
-                "<i>3</i>. 👥 Мои друзья\n" +
-                "<i>4</i>. ⏰ Уведомления\n";
+                "<i>2</i>. 👥 Мои друзья\n" +
+                "<i>3</i>. ⏰ Уведомления\n";
 
 
         try {

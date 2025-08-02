@@ -1,10 +1,7 @@
 package org.telebot.command.runner;
 
 import org.telebot.buttons.*;
-import org.telebot.command.Help;
-import org.telebot.command.Registration;
-import org.telebot.command.Setting;
-import org.telebot.command.Start;
+import org.telebot.command.*;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.command.interfaces.ExecuteCommand;
 
@@ -20,6 +17,7 @@ public class Runner {
         commands.put("/setting", new Setting());
         commands.put("/help", new Help());
         commands.put("/registration", new Registration());
+        commands.put("/add", new Add());
 
     }
 

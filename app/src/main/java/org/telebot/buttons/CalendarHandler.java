@@ -66,7 +66,7 @@ public class CalendarHandler extends ConnectBot implements ExecuteButton {
                 DBConnector dbConnector = new DBConnector();
                 DBManager dbManager = new DBManager(dbConnector);
                 dbManager.addUser(update, tempUser);
-
+                User.saveUser(chatId, tempUser);
                 User.removeTempUser(chatId);
                 selectedYears.remove(chatId);
                 selectedMonths.remove(chatId);
@@ -75,6 +75,7 @@ public class CalendarHandler extends ConnectBot implements ExecuteButton {
                         "Ваша дата рождения: " + birthday + "\n" +
                         "Ваш возраст: " + tempUser.getAge() + " лет");
                 sendMessage(chatId, "Используйте /help для просмотра доступных команд");
+
             } catch (Exception e) {
                 sendMessage(chatId, "❌ Ошибка при сохранении даты. Попробуйте ещё раз.");
             }

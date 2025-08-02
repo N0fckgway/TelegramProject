@@ -8,7 +8,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import javax.print.attribute.standard.Chromaticity;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.function.LongFunction;
 
 @Slf4j
@@ -27,19 +29,6 @@ public class DBManager extends ConnectBot {
         }
     }
 
-  /*  public static void loadCollection() throws SQLException {
-        return dbConnector.handleQuery((Connection connection) -> {
-
-        });
-    }
-
-    public static Integer getChatId() throws SQLException {
-        return dbConnector.handleQuery((Connection connection) -> {
-            String response = "SELECT chatid FROM users WHERE ";
-            PreparedStatement preparedStatement = connection.prepareStatement(response);
-            preparedStatement.executeQuery();
-        });
-    }*/
 
     public void addUser(Update update, User user) {
         dbConnector.handleQuery((Connection conn) -> {
@@ -72,6 +61,31 @@ public class DBManager extends ConnectBot {
                 resultSet.next();
                 return resultSet.getInt("count") > 0;
 
+        });
+    }
+
+    public User getUserById(Long chatId) {
+        return dbConnector.handleQuery((Connection conn) -> {
+            String sqlQuery = "SELECT u.* " +
+                    "FROM users AS u " +
+                    "WHERE u.chatid = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, chatId);
+            ResultSet rs = preparedStatement.executeQuery();
+            if (rs.next()) {
+                User user = new User(
+                        rs.getLong("chatid"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("username"),
+                        rs.getString("phonenumber"),
+                        rs.getObject("birth", LocalDate.class)
+
+                );
+                return user;
+            } else {
+                return null;
+            }
         });
     }
 
