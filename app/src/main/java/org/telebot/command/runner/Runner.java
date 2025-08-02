@@ -1,8 +1,6 @@
 package org.telebot.command.runner;
 
-import org.telebot.buttons.Friends;
-import org.telebot.buttons.Notification;
-import org.telebot.buttons.Profile;
+import org.telebot.buttons.*;
 import org.telebot.command.Help;
 import org.telebot.command.Registration;
 import org.telebot.command.Setting;
@@ -10,6 +8,7 @@ import org.telebot.command.Start;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.command.interfaces.ExecuteCommand;
 
+import java.time.Year;
 import java.util.HashMap;
 
 public class Runner {
@@ -29,8 +28,17 @@ public class Runner {
         buttons.put("FRIENDS", new Friends());
         buttons.put("NOTIFICATIONS", new Notification());
 
+        CalendarHandler calendarHandler = new CalendarHandler();
+        Year currentYear = Year.now();
+        for (int year = 1950; year <= currentYear.getValue(); year++) {
+            buttons.put("YEAR_" + year, calendarHandler);
+        }
 
+        for (int month = 1; month <= 12; month ++) {
+            buttons.put("MONTH_" + month, calendarHandler);
+        }
 
+        buttons.put("DATE_", calendarHandler);
 
     }
 

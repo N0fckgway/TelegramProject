@@ -6,6 +6,7 @@ package org.telebot.connector;
 import lombok.Getter;
 import org.telebot.buttons.SendContact;
 import org.telebot.command.Help;
+import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.command.runner.Runner;
 import org.telebot.data.User;
 import org.telebot.data.database.DBConnector;
@@ -104,7 +105,18 @@ public class ConnectBot extends TelegramLongPollingBot {
         Runner runner = new Runner();
         String data = update.getCallbackQuery().getData();
         runner.registrationButton();
-        runner.buttons.get(data).applyButton(update);
+
+        ExecuteButton button = runner.buttons.get(data);
+
+        if (button == null && data.startsWith("DATE_")) {
+            button = runner.buttons.get("DATE_");
+        }
+        if (button != null) {
+            button.applyButton(update);
+        } else {
+            sendMessageOfMistake("Нет обработчика для кнопки: ", update);
+        }
+
 
     }
 

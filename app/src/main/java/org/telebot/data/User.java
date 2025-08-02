@@ -21,6 +21,8 @@ public class User {
     private String userName;
     private String phoneNumber;
     private LocalDate birthday;
+    @Getter
+    private Integer age;
 
     private static final Map<Long, User> users = new HashMap<>();
 
@@ -32,9 +34,36 @@ public class User {
         this.userName = userName;
         this.phoneNumber = phoneNumber;
         this.birthday = birthday;
+        this.age = calculateAge(birthday);
+
     }
-    public int getAge() {
+
+    private Integer calculateAge(LocalDate birthday) {
+        if (birthday == null) {
+            return null;
+        }
         return Period.between(birthday, LocalDate.now()).getYears();
     }
 
+
+
+    public static void saveTempUser(Long chatId, User user) {
+        users.put(chatId, user);
+    }
+
+    public static User getTempUser(Long chatId) {
+        return users.get(chatId);
+    }
+
+    public static void removeTempUser(Long chatId) {
+        users.remove(chatId);
+    }
+
+    public static void saveUser(Long chatId, User user) {
+        users.put(chatId, user);
+    }
+
+    public static User getUser(Long chatId) {
+        return users.get(chatId);
+    }
 }

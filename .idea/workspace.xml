@@ -5,23 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="154ffff4-1248-4d04-80f5-f204dfa9e39c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/TelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/TelegramBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/Profile.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/Profile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/RegistrationUser.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Setting.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Setting.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/SendContact.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/SendContact.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Start.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Start.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/interfaces/InlineKeyboardResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/interfaces/KeyboardResponse.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Command.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Runner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/resources/properties/apiBot.properties" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/resources/properties/apiBot.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBManager.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,6 +112,8 @@
       <workItem from="1752958382191" duration="2593000" />
       <workItem from="1753370480314" duration="23890000" />
       <workItem from="1753729450706" duration="8143000" />
+      <workItem from="1753873022259" duration="5866000" />
+      <workItem from="1753981585061" duration="15100000" />
     </task>
     <servers />
   </component>

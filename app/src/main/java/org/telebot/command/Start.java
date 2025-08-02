@@ -26,7 +26,7 @@ public class Start extends ConnectBot implements ExecuteCommand {
                 "Теперь ты — мой новый друг! 🎉" +
                 "\n\n" +
                 "<b>Я помогу тебе не забывать о днях рождениях родных, друзей и всех, кто тебе дорог.</b>\n\n" +
-                "<b>Чтобы начать</b>, нажми на эту команду /help - она тебе выведет краткую справку обо мне!";
+                "<b>Чтобы начать</b>, нажми на эту команду /registration - и пройди регистрацию для заполнения профиля о себе!";
         Long chatId = update.getMessage().getChatId();
         SendMessage sendMessage = new SendMessage(String.valueOf(chatId), start);
         sendMessage.setParseMode(ParseMode.HTML);
@@ -38,5 +38,6 @@ public class Start extends ConnectBot implements ExecuteCommand {
         }
 
     }
+
 
 }

@@ -43,7 +43,7 @@ public class DBManager extends ConnectBot {
 
     public void addUser(Update update, User user) {
         dbConnector.handleQuery((Connection conn) -> {
-            String insertHuman = "INSERT INTO users(chatid, firstName, lastName, phonenumber, username, birth) VALUES (?, ?, ?, ?, ?, ?)";
+            String insertHuman = "INSERT INTO users(chatid, firstName, lastName, phonenumber, username, birth, age) VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement preparedStatements = conn.prepareStatement(insertHuman, Statement.RETURN_GENERATED_KEYS);
             preparedStatements.setLong(1, user.getChatId());
             preparedStatements.setString(2, user.getFirstName());
@@ -51,6 +51,7 @@ public class DBManager extends ConnectBot {
             preparedStatements.setString(4, user.getPhoneNumber());
             preparedStatements.setString(5, user.getUserName());
             preparedStatements.setObject(6, (user.getBirthday()));
+            preparedStatements.setObject(7, user.getAge());
             preparedStatements.executeUpdate();
             ResultSet resHuman = preparedStatements.getGeneratedKeys();
             if (!resHuman.next()) {

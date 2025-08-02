@@ -83,7 +83,8 @@ public class DBConnector implements DBConnectable {
                 "lastName VARCHAR(255) CHECK(lastName<>'')," +
                 "userName VARCHAR(255) CHECK(userName<>'')," +
                 "phoneNumber VARCHAR(255) NOT NULL CHECK(phoneNumber<>'')," +
-                "birth TIMESTAMP" +
+                "birth DATE NOT NULL, " +
+                "age INTEGER NOT NULL" +
                         ")"
                 );
 
