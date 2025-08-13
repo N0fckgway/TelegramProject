@@ -18,7 +18,7 @@ public class Notification extends ConnectBot implements ExecuteButton, KeyboardR
     public void applyButton(Update update) {
         String message = """
                 <strong>Добро пожаловать в раздел 🔔Уведомления!</strong>
-                
+                По умолчанию включены в 10 утра!!!
                 <i>Выберите для кого вы будете настраивать уведомления!</i>""";
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
         sendMessage(keyboardResponse(chatId, message));

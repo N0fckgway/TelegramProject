@@ -5,24 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="154ffff4-1248-4d04-80f5-f204dfa9e39c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/ButtonForFriends.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/DailyNotification.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/NoButton.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/YesButton.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/NotificationScheduler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/TelegramBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/TelegramBot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/CalendarHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/CalendarHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/Notification.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/Notification.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Add.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Add.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Runner.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/runner/Runner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBConnector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBManager.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/enums/UserStatus.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/exception/InvalidCommandException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/exception/InvalidDataException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/interfaces/SQLFunction.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/interfaces/SQLFunction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -130,7 +113,7 @@
       <workItem from="1754587898555" duration="798000" />
       <workItem from="1754766008295" duration="13310000" />
       <workItem from="1755019589214" duration="17112000" />
-      <workItem from="1755040916660" duration="4804000" />
+      <workItem from="1755040916660" duration="6577000" />
     </task>
     <servers />
   </component>

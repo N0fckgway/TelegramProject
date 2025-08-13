@@ -3,5 +3,16 @@
 
 .DS_Store
 
+app/src/main/resources/properties/apiBot.properties
+**/properties/apiBot.properties
+*.properties
+
+# Или более общий подход
+**/properties/
+**/config/
+*.env
+*.key
+*.pem
+
 # Ignore Gradle build output directory
 build
