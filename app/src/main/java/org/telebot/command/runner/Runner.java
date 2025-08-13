@@ -22,12 +22,19 @@ public class Runner {
     }
 
     public void registrationButton() {
+
         buttons.put("PROFILE", new Profile());
         buttons.put("FRIENDS", new Friends());
         buttons.put("NOTIFICATIONS", new Notification());
 
+        buttons.put("YES", new YesButton());
+        buttons.put("NO", new NoButton());
+        buttons.put("FOR_ME", new ButtonForMe());
+        buttons.put("FOR_FRIENDS", new ButtonForMe());
+
         CalendarHandler calendarHandler = new CalendarHandler();
         Year currentYear = Year.now();
+
         for (int year = 1950; year <= currentYear.getValue(); year++) {
             buttons.put("YEAR_" + year, calendarHandler);
         }
@@ -37,6 +44,8 @@ public class Runner {
         }
 
         buttons.put("DATE_", calendarHandler);
+
+
 
     }
 

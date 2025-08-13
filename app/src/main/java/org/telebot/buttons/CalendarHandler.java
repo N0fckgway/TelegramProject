@@ -3,6 +3,8 @@ package org.telebot.buttons;
 import org.telebot.command.Help;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.connector.ConnectBot;
+import org.telebot.connector.NotificationScheduler;
+import org.telebot.data.NotificationConfig;
 import org.telebot.data.User;
 import org.telebot.data.database.DBConnector;
 import org.telebot.data.database.DBManager;
@@ -11,6 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.HashMap;
@@ -54,7 +57,6 @@ public class CalendarHandler extends ConnectBot implements ExecuteButton {
             sendDaySelection(chatId, year, month);
         }
     }
-
     private void handleDateSelection(Long chatId, String callbackData, Update update) {
         String dateStr = callbackData.replace("DATE_", "");
         User tempUser = User.getTempUser(chatId);
@@ -62,10 +64,19 @@ public class CalendarHandler extends ConnectBot implements ExecuteButton {
             try {
                 LocalDate birthday = LocalDate.parse(dateStr);
                 tempUser.setBirthday(birthday);
-                tempUser.setAge(Period.between(birthday, LocalDate.now()).getYears());
+
+                int calculatedAge = Period.between(birthday, LocalDate.now()).getYears();
+                tempUser.setAge(calculatedAge);
+
+                NotificationConfig notificationConfig = new NotificationConfig(tempUser.getChatId(), true);
+
                 DBConnector dbConnector = new DBConnector();
                 DBManager dbManager = new DBManager(dbConnector);
-                dbManager.addUser(update, tempUser);
+
+                dbManager.addUser(tempUser);
+                dbManager.addNotificationStatusForUser(notificationConfig);
+
+
                 User.saveUser(chatId, tempUser);
                 User.removeTempUser(chatId);
                 selectedYears.remove(chatId);
@@ -74,10 +85,12 @@ public class CalendarHandler extends ConnectBot implements ExecuteButton {
                 sendMessage(chatId, "✅ Регистрация завершена!\n" +
                         "Ваша дата рождения: " + birthday + "\n" +
                         "Ваш возраст: " + tempUser.getAge() + " лет");
+
                 sendMessage(chatId, "Используйте /help для просмотра доступных команд");
 
             } catch (Exception e) {
                 sendMessage(chatId, "❌ Ошибка при сохранении даты. Попробуйте ещё раз.");
+                throw new RuntimeException(e.getMessage());
             }
         }
     }

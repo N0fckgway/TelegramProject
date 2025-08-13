@@ -3,8 +3,7 @@ package org.telebot.data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.telebot.data.enums.UserStatus;
-import org.telebot.data.exception.InvalidDataException;
+
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -21,7 +20,6 @@ public class User {
     private String userName;
     private String phoneNumber;
     private LocalDate birthday;
-    @Getter
     private Integer age;
 
     private static final Map<Long, User> users = new HashMap<>();

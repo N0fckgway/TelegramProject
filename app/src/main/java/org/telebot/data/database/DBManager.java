@@ -1,17 +1,16 @@
 package org.telebot.data.database;
 
 import lombok.extern.slf4j.Slf4j;
-import org.telebot.command.runner.Command;
 import org.telebot.connector.ConnectBot;
+import org.telebot.data.NotificationConfig;
 import org.telebot.data.User;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.print.attribute.standard.Chromaticity;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.function.LongFunction;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 public class DBManager extends ConnectBot {
@@ -30,27 +29,33 @@ public class DBManager extends ConnectBot {
     }
 
 
-    public void addUser(Update update, User user) {
+    public void addUser(User user) throws SQLException {
         dbConnector.handleQuery((Connection conn) -> {
             String insertHuman = "INSERT INTO users(chatid, firstName, lastName, phonenumber, username, birth, age) VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement preparedStatements = conn.prepareStatement(insertHuman, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement preparedStatements = conn.prepareStatement(insertHuman);
             preparedStatements.setLong(1, user.getChatId());
             preparedStatements.setString(2, user.getFirstName());
             preparedStatements.setString(3, user.getLastName());
             preparedStatements.setString(4, user.getPhoneNumber());
             preparedStatements.setString(5, user.getUserName());
-            preparedStatements.setObject(6, (user.getBirthday()));
-            preparedStatements.setObject(7, user.getAge());
+            preparedStatements.setObject(6, Date.valueOf((user.getBirthday())));
+            preparedStatements.setInt(7, user.getAge());
             preparedStatements.executeUpdate();
-            ResultSet resHuman = preparedStatements.getGeneratedKeys();
-            if (!resHuman.next()) {
-                Long chatId = update.getMessage().getChatId();
-                sendMessage(chatId, "Ошибка: вы не добавлены в базу данных! (подождите мы все поправим)");
-                throw new SQLException();
-            }
-            return resHuman.getLong(2);
         });
     }
+
+    public void addNotificationStatusForUser(NotificationConfig notificationConfig) throws SQLException {
+        dbConnector.handleQuery((Connection conn) -> {
+            String insertHuman = "INSERT INTO notification_setting(chatid, enabled) VALUES (?, ?)";
+            PreparedStatement preparedStatements = conn.prepareStatement(insertHuman);
+            preparedStatements.setLong(1, notificationConfig.getChatId());
+            preparedStatements.setBoolean(2, notificationConfig.getEnabled());
+            preparedStatements.executeUpdate();
+
+
+        });
+    }
+
     public boolean checkUserExisting(Long id) {
         return dbConnector.handleQuery((Connection conn) -> {
                 String existingQuery = "SELECT COUNT(*) AS count FROM users WHERE users.chatid = ?";
@@ -82,11 +87,75 @@ public class DBManager extends ConnectBot {
                         rs.getObject("birth", LocalDate.class)
 
                 );
+                user.setAge(rs.getInt("age"));
                 return user;
             } else {
                 return null;
             }
         });
+
+    }
+
+    public void updateEnableUser(Boolean enable, Long chatId) {
+        try {
+            dbConnector.handleQuery((Connection conn) -> {
+                String sqlQuery = "UPDATE notification_setting SET enabled = ? WHERE chatid = ?";
+                PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+                preparedStatement.setBoolean(1, enable);
+                preparedStatement.setLong(2, chatId);
+                preparedStatement.executeUpdate();
+
+
+            });
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public List<User> getAllUsersWithEnabled(boolean enable) {
+        return dbConnector.handleQuery((Connection conn) -> {
+            String sqlQuery = "SELECT u.chatid, u.firstName, u.lastName, u.username, u.phonenumber, u.birth, u.age " +
+                    "FROM users u " +
+                    "INNER JOIN notification_setting n ON u.chatid = n.chatid " +
+                    "WHERE n.enabled = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setBoolean(1, enable);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<User> users = new ArrayList<>();
+            while (rs.next()) {
+                User user = new User(
+                        rs.getLong("chatid"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("username"),
+                        rs.getString("phonenumber"),
+                        rs.getObject("birth", LocalDate.class)
+
+                );
+                user.setAge(rs.getInt("age"));
+                users.add(user);
+            }
+            return users;
+        });
+
+    }
+
+    public NotificationConfig getNotificationConfigById(Long chatId) {
+        return dbConnector.handleQuery((Connection conn) -> {
+            String sqlQuery = "SELECT * FROM notification_setting WHERE chatid = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setLong(1, chatId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                NotificationConfig notificationConfig = new NotificationConfig(
+                        resultSet.getLong("chatid"),
+                        resultSet.getBoolean("enabled")
+                );
+                return notificationConfig;
+            } else return null;
+
+        });
+
     }
 
 }

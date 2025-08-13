@@ -78,7 +78,7 @@ public class DBConnector implements DBConnectable {
 
         statement.execute("CREATE TABLE IF NOT EXISTS users" +
                 "(id BIGINT NOT NULL PRIMARY KEY DEFAULT NEXTVAL('user_id_seq')," +
-                "chatid BIGINT NOT NULL," +
+                "chatid BIGINT NOT NULL UNIQUE," +
                 "firstName VARCHAR(255) NOT NULL CHECK(firstName<>'')," +
                 "lastName VARCHAR(255) CHECK(lastName<>'')," +
                 "userName VARCHAR(255) CHECK(userName<>'')," +
@@ -87,7 +87,12 @@ public class DBConnector implements DBConnectable {
                 "age INTEGER NOT NULL" +
                         ")"
                 );
-
+        statement.execute("CREATE TABLE IF NOT EXISTS notification_setting" +
+                "(" +
+                "chatid BIGINT PRIMARY KEY REFERENCES users(chatid)," +
+                "enabled BOOLEAN DEFAULT true" +
+                ")"
+        );
         connection.close();
     }
 
