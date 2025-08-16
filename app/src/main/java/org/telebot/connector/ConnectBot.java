@@ -5,12 +5,14 @@ package org.telebot.connector;
 
 import lombok.Getter;
 import org.telebot.buttons.SendContact;
+import org.telebot.command.Add;
 import org.telebot.command.Help;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.command.runner.Runner;
 import org.telebot.data.User;
 import org.telebot.data.database.DBConnector;
 import org.telebot.data.database.DBManager;
+import org.telebot.data.parser.TextParser;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -30,6 +32,7 @@ import java.util.Properties;
 public class ConnectBot extends TelegramLongPollingBot {
     private String botToken;
     private String username;
+    private final TextParser textParser = new TextParser();
 
 
 
@@ -74,14 +77,26 @@ public class ConnectBot extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
-            executeCommand(update);
+            String text = update.getMessage().getText();
+            if (text.startsWith("/")) {
+                executeCommand(update);
+
+            } else {
+                Long chatId = update.getMessage().getChatId();
+                Add addCommand = new Add();
+                if (addCommand.isUserInAddProcess(chatId)) {
+                    addCommand.apply(update);
+                } else return;
+            }
 
         } else if (update.hasCallbackQuery()) {
             answerCallBackFunc(update);
             executeButton(update);
+
         } else if (update.getMessage().hasContact()) {
             SendContact sendContact = new SendContact();
             sendContact.applyButton(update);
+
         }
     }
 

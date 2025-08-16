@@ -1,5 +1,6 @@
 package org.telebot.buttons;
 
+import lombok.extern.slf4j.Slf4j;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.connector.ConnectBot;
 import org.telebot.connector.NotificationScheduler;
@@ -10,11 +11,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 
+@Slf4j
 public class NoButton extends ConnectBot implements ExecuteButton {
     @Override
     public void applyButton(Update update) {
         DBConnector dbConnector = new DBConnector();
         DBManager dbManager = new DBManager(dbConnector);
+        /// по возможности как то видоизменить этот кусок
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
         String text = "✅Выключили каждодневные уведомления!";
         NotificationScheduler notificationScheduler = new NotificationScheduler();

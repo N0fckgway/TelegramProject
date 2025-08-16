@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="154ffff4-1248-4d04-80f5-f204dfa9e39c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/Friends.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/NoButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/NoButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Add.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Add.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,6 +33,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$USER_HOME$/.gradle/jdks/eclipse_adoptium-21-aarch64-os_x.2/jdk-21.0.7+6/Contents/Home/lib/src.zip!/java.base/java/util/concurrent/Executors.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -113,7 +120,9 @@
       <workItem from="1754587898555" duration="798000" />
       <workItem from="1754766008295" duration="13310000" />
       <workItem from="1755019589214" duration="17112000" />
-      <workItem from="1755040916660" duration="6577000" />
+      <workItem from="1755040916660" duration="20479000" />
+      <workItem from="1755199887488" duration="3019000" />
+      <workItem from="1755354908468" duration="1913000" />
     </task>
     <servers />
   </component>
