@@ -2,9 +2,11 @@ package org.telebot.data.database;
 
 import lombok.extern.slf4j.Slf4j;
 import org.telebot.connector.ConnectBot;
+import org.telebot.data.Friend;
 import org.telebot.data.NotificationConfig;
 import org.telebot.data.User;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.sql.*;
@@ -157,5 +159,38 @@ public class DBManager extends ConnectBot {
         });
 
     }
+
+    public void addFriend(Friend friend, Long ownerChatId) throws SQLException {
+        dbConnector.handleQuery((Connection conn) -> {
+            String insertFriend = "INSERT INTO friends(owner_chatid, firstName, lastName, birth) VALUES (?, ?, ?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(insertFriend);
+            preparedStatement.setLong(1, ownerChatId);
+            preparedStatement.setString(2, friend.getFirstName());
+            preparedStatement.setString(3, friend.getLastName());
+            preparedStatement.setObject(4, Date.valueOf(friend.getBirthday()));
+            preparedStatement.executeUpdate();
+        });
+    }
+
+    public Long getFriendId(Long ownerChatId) throws SQLException {
+        return dbConnector.handleQuery((Connection conn) -> {
+            String getId = "SELECT id FROM friends WHERE owner_chatid = ? ORDER BY created_at DESC LIMIT 1";
+            PreparedStatement preparedStatement = conn.prepareStatement(getId);
+            preparedStatement.setLong(1, ownerChatId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return resultSet.getLong("id");
+
+            } else {
+                return null;
+            }
+
+        });
+    }
+
+
+
+
 
 }

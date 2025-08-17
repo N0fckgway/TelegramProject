@@ -7,11 +7,14 @@ import org.telebot.command.runner.Command;
 import org.telebot.connector.ConnectBot;
 import org.telebot.data.Friend;
 import org.telebot.data.StepAdd;
+import org.telebot.data.database.DBConnector;
+import org.telebot.data.database.DBManager;
 import org.telebot.data.parser.TextParser;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.sql.SQLException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -80,16 +83,24 @@ public class Add extends ConnectBot implements ExecuteCommand {
     private void handleBirth(Long chatId, String text) {
         try {
             if (textParser.hasDate(text)) {
+                DBManager dbManager = new DBManager(new DBConnector());
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate birth = LocalDate.parse(text, formatter);
 
                 Friend friend = tempFriend.get(chatId);
                 friend.setBirthday(birth);
 
+                dbManager.addFriend(friend, chatId);
+                Long friendId = dbManager.getFriendId(chatId);
+                friend.setId(friendId);
+
                 sendMessage(chatId, "Друг успешно добавлен! ✅\n" +
+                        "Id:" + friend.getId() + "\n" +
                         "Имя: " + friend.getFirstName() + "\n" +
                         "Фамилия: " + friend.getLastName() + "\n" +
                         "Дата рождения: " + friend.getBirthday().format(formatter));
+
+
 
                 tempFriend.remove(chatId);
                 stepAdd.remove(chatId);
@@ -97,6 +108,8 @@ public class Add extends ConnectBot implements ExecuteCommand {
 
         } catch (DateTimeException e) {
             sendMessage(chatId, "Ошибка! Неверный формат даты рождения! Попробуйте еще раз!");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

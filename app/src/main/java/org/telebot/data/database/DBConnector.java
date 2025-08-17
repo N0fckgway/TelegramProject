@@ -75,6 +75,7 @@ public class DBConnector implements DBConnectable {
 
         Statement statement = connection.createStatement();
         statement.execute("CREATE SEQUENCE IF NOT EXISTS user_id_seq INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1");
+        statement.execute("CREATE SEQUENCE IF NOT EXISTS friend_id_seq INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1");
 
         statement.execute("CREATE TABLE IF NOT EXISTS users" +
                 "(id BIGINT NOT NULL PRIMARY KEY DEFAULT NEXTVAL('user_id_seq')," +
@@ -91,6 +92,17 @@ public class DBConnector implements DBConnectable {
                 "(" +
                 "chatid BIGINT PRIMARY KEY REFERENCES users(chatid)," +
                 "enabled BOOLEAN DEFAULT true" +
+                ")"
+        );
+
+        statement.execute("CREATE TABLE IF NOT EXISTS friends" +
+                "(" +
+                "id BIGINT NOT NULL PRIMARY KEY DEFAULT NEXTVAL('friend_id_seq')," +
+                "owner_chatid BIGINT NOT NULL REFERENCES users(chatid)," +
+                "firstName VARCHAR(255) NOT NULL CHECK(firstName<>'')," +
+                "lastName VARCHAR(255) NOT NULL CHECK(lastName<>'')," +
+                "birth DATE NOT NULL," +
+                "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
                 ")"
         );
         connection.close();
