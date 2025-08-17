@@ -7,7 +7,7 @@ app/src/main/resources/properties/apiBot.properties
 **/properties/apiBot.properties
 *.properties
 
-# Или более общий подход
+# Или более общий подход
 **/properties/
 **/config/
 *.env
@@ -16,3 +16,7 @@ app/src/main/resources/properties/apiBot.properties
 
 # Ignore Gradle build output directory
 build
+
+# Логи приложения
+logs/
+*.log

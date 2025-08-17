@@ -1,5 +1,6 @@
 package org.telebot.connector;
 
+import lombok.extern.slf4j.Slf4j;
 import org.telebot.data.Friend;
 import org.telebot.data.User;
 import org.telebot.data.database.DBConnector;
@@ -18,28 +19,34 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 public class NotificationScheduler extends ConnectBot {
 
     private final DBManager dbManager;
     private static ScheduledExecutorService scheduler;
 
     public NotificationScheduler() {
+        log.info("Инициализация NotificationScheduler...");
         DBConnector dbConnector = new DBConnector();
         this.dbManager = new DBManager(dbConnector);
         startScheduler();
+        log.info("NotificationScheduler инициализирован успешно");
     }
 
     private void startScheduler() {
+        log.info("Запуск планировщика уведомлений...");
         scheduler = Executors.newScheduledThreadPool(1);
         scheduleDailyNotification();
-
+        log.info("Планировщик уведомлений запущен");
     }
 
     private synchronized void scheduleDailyNotification() {
         long initialDelay = getNextRunTime(10, 0);
+        log.debug("Планирование ежедневных уведомлений. Задержка: {} мс", initialDelay);
 
         scheduler.schedule(
                 () -> {
+                    log.info("Выполнение запланированных уведомлений...");
                     sendDailyNotifications();
                     sendBirthdayNotificationForFriends();
                     scheduleDailyNotification();
@@ -47,14 +54,27 @@ public class NotificationScheduler extends ConnectBot {
                 initialDelay,
                 TimeUnit.MILLISECONDS
         );
+        log.debug("Следующее уведомление запланировано через {} мс", initialDelay);
     }
 
     public void changeButtonStatusUser(Boolean enable, Long chatId) {
-        dbManager.updateEnableUser(enable, chatId);
+        log.info("Изменение статуса уведомлений для пользователя: chatId={}, enabled={}", chatId, enable);
+        try {
+            dbManager.updateEnableUser(enable, chatId);
+            log.info("Статус уведомлений для пользователя {} обновлен: {}", chatId, enable);
+        } catch (Exception e) {
+            log.error("Ошибка обновления статуса уведомлений для пользователя {}: {}", chatId, e.getMessage());
+        }
     }
 
     public void changeButtonStatusFriend(Boolean enable, Long chatId) {
-        dbManager.updateEnableFriend(enable, chatId);
+        log.info("Изменение статуса уведомлений для друзей: chatId={}, enabled={}", chatId, enable);
+        try {
+            dbManager.updateEnableFriend(enable, chatId);
+            log.info("Статус уведомлений для друзей пользователя {} обновлен: {}", chatId, enable);
+        } catch (Exception e) {
+            log.error("Ошибка обновления статуса уведомлений для друзей пользователя {}: {}", chatId, e.getMessage());
+        }
     }
 
     private long getNextRunTime(int hour, int minute) {
@@ -65,28 +85,41 @@ public class NotificationScheduler extends ConnectBot {
             nextRun = nextRun.plusDays(1);
         }
 
-        return Duration.between(now, nextRun).toMillis();
+        long delay = Duration.between(now, nextRun).toMillis();
+        log.debug("Расчет времени следующего запуска: текущее={}, следующее={}, задержка={} мс", 
+                now, nextRun, delay);
+        
+        return delay;
     }
 
     private void sendDailyNotifications() {
+        log.info("Отправка ежедневных уведомлений...");
         try {
             List<User> users = dbManager.getAllUsersWithEnabled(true);
+            log.debug("Найдено пользователей с включенными уведомлениями: {}", users.size());
+            
             for (User user : users) {
                 if (user.getBirthday() != null) {
+                    log.debug("Отправка уведомления пользователю {} ({} {})", 
+                            user.getChatId(), user.getFirstName(), user.getLastName());
                     sendBirthdayNotification(user);
-
+                } else {
+                    log.debug("Пользователь {} не имеет даты рождения, уведомление не отправлено", user.getChatId());
                 }
             }
+            log.info("Ежедневные уведомления отправлены. Обработано пользователей: {}", users.size());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Ошибка отправки ежедневных уведомлений: {}", e.getMessage(), e);
         }
     }
 
     private void sendBirthdayNotification(User user) {
         try {
             long daysUntil = daysUntilBirthday(user.getBirthday());
+            log.debug("До дня рождения пользователя {} осталось {} дней", user.getChatId(), daysUntil);
 
             String message = createBirthdayMessage(user, daysUntil);
+            log.debug("Создано сообщение для пользователя {}: {}", user.getChatId(), message);
 
             SendMessage sendMessage = new SendMessage();
             sendMessage.setChatId(String.valueOf(user.getChatId()));
@@ -94,10 +127,12 @@ public class NotificationScheduler extends ConnectBot {
             sendMessage.setParseMode(ParseMode.HTML);
 
             execute(sendMessage);
-            System.out.println("Отправлено уведомление пользователю " + user.getChatId());
+            log.info("Уведомление о дне рождения отправлено пользователю {} (chatId: {})", 
+                    user.getFirstName(), user.getChatId());
 
         } catch (Exception e) {
-            System.out.println("Ошибка отправки уведомления: " + e.getMessage());
+            log.error("Ошибка отправки уведомления о дне рождения пользователю {}: {}", 
+                    user.getChatId(), e.getMessage(), e);
         }
     }
 
