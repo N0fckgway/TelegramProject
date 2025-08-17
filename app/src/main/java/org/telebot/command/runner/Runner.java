@@ -18,6 +18,7 @@ public class Runner {
         commands.put("/help", new Help());
         commands.put("/registration", new Registration());
         commands.put("/add", new Add());
+        commands.put("/delete", new Delete());
 
     }
 
@@ -26,11 +27,13 @@ public class Runner {
         buttons.put("PROFILE", new Profile());
         buttons.put("FRIENDS", new Friends());
         buttons.put("NOTIFICATIONS", new Notification());
-
+        buttons.put("FOR_ME", new NotificationForUser());
+        buttons.put("FOR_FRIENDS", new NotificationForFriends());
         buttons.put("YES", new YesButton());
         buttons.put("NO", new NoButton());
-        buttons.put("FOR_ME", new ButtonForMe());
-        buttons.put("FOR_FRIENDS", new ButtonForMe());
+        buttons.put("YES_FOR_FRIENDS", new YesButtonForFriends());
+        buttons.put("NO_FOR_FRIENDS", new NoButtonForFriends());
+
 
         CalendarHandler calendarHandler = new CalendarHandler();
         Year currentYear = Year.now();

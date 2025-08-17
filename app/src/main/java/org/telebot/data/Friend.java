@@ -11,8 +11,17 @@ public class Friend {
     private Long id;
     private String firstName;
     private String lastName;
-    private String userName;
+    private String role;
     private LocalDate birthday;
 
+    public Friend(Long id, String firstName, String lastName, String role, LocalDate birthday) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.birthday = birthday;
+    }
 
+    public Friend() {
+    }
 }

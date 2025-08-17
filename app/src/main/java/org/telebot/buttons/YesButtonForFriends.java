@@ -9,19 +9,19 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-public class YesButton extends ConnectBot implements ExecuteButton {
+public class YesButtonForFriends extends ConnectBot implements ExecuteButton {
     @Override
     public void applyButton(Update update) {
         DBConnector dbConnector = new DBConnector();
         DBManager dbManager = new DBManager(dbConnector);
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
-        String text = "✅Включили каждодневные уведомления!";
+        String text = "✅Включили уведомления для друзей!";
         NotificationScheduler notificationScheduler = new NotificationScheduler();
-        if (dbManager.getNotificationConfigById(chatId).getEnabledForUsers()) {
-            sendMessage(chatId, "😳Уже включены уведомления");
+        if (dbManager.getNotificationConfigById(chatId).getEnabledForFriends()) {
+            sendMessage(chatId, "😳Уже включены для друзей уведомления");
             return;
         }
-        notificationScheduler.changeButtonStatusUser(true, chatId);
+        notificationScheduler.changeButtonStatusFriend(true, chatId);
         sendMessage(chatId, text);
     }
 

@@ -3,7 +3,6 @@ package org.telebot.buttons;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.command.interfaces.KeyboardResponse;
 import org.telebot.connector.ConnectBot;
-import org.telebot.data.User;
 import org.telebot.data.database.DBConnector;
 import org.telebot.data.database.DBManager;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
@@ -19,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ButtonForMe extends ConnectBot implements ExecuteButton, KeyboardResponse {
+public class NotificationForUser extends ConnectBot implements ExecuteButton, KeyboardResponse {
 
     @Override
     public void applyButton(Update update) {

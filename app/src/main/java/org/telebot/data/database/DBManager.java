@@ -1,6 +1,7 @@
 package org.telebot.data.database;
 
 import lombok.extern.slf4j.Slf4j;
+import org.telebot.buttons.Friends;
 import org.telebot.connector.ConnectBot;
 import org.telebot.data.Friend;
 import org.telebot.data.NotificationConfig;
@@ -13,6 +14,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Slf4j
 public class DBManager extends ConnectBot {
@@ -48,10 +50,11 @@ public class DBManager extends ConnectBot {
 
     public void addNotificationStatusForUser(NotificationConfig notificationConfig) throws SQLException {
         dbConnector.handleQuery((Connection conn) -> {
-            String insertHuman = "INSERT INTO notification_setting(chatid, enabled) VALUES (?, ?)";
+            String insertHuman = "INSERT INTO notification_setting(chatid, enabled_for_users, enabled_for_friends) VALUES (?, ?, ?)";
             PreparedStatement preparedStatements = conn.prepareStatement(insertHuman);
             preparedStatements.setLong(1, notificationConfig.getChatId());
-            preparedStatements.setBoolean(2, notificationConfig.getEnabled());
+            preparedStatements.setBoolean(2, notificationConfig.getEnabledForUsers());
+            preparedStatements.setBoolean(3, notificationConfig.getEnabledForFriends());
             preparedStatements.executeUpdate();
 
 
@@ -101,7 +104,23 @@ public class DBManager extends ConnectBot {
     public void updateEnableUser(Boolean enable, Long chatId) {
         try {
             dbConnector.handleQuery((Connection conn) -> {
-                String sqlQuery = "UPDATE notification_setting SET enabled = ? WHERE chatid = ?";
+                String sqlQuery = "UPDATE notification_setting SET enabled_for_users = ? WHERE chatid = ?";
+                PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+                preparedStatement.setBoolean(1, enable);
+                preparedStatement.setLong(2, chatId);
+                preparedStatement.executeUpdate();
+
+
+            });
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void updateEnableFriend(Boolean enable, Long chatId) {
+        try {
+            dbConnector.handleQuery((Connection conn) -> {
+                String sqlQuery = "UPDATE notification_setting SET enabled_for_friends = ? WHERE chatid = ?";
                 PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
                 preparedStatement.setBoolean(1, enable);
                 preparedStatement.setLong(2, chatId);
@@ -119,7 +138,7 @@ public class DBManager extends ConnectBot {
             String sqlQuery = "SELECT u.chatid, u.firstName, u.lastName, u.username, u.phonenumber, u.birth, u.age " +
                     "FROM users u " +
                     "INNER JOIN notification_setting n ON u.chatid = n.chatid " +
-                    "WHERE n.enabled = ?";
+                    "WHERE n.enabled_for_users = ?";
             PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setBoolean(1, enable);
             ResultSet rs = preparedStatement.executeQuery();
@@ -151,7 +170,8 @@ public class DBManager extends ConnectBot {
             if (resultSet.next()) {
                 NotificationConfig notificationConfig = new NotificationConfig(
                         resultSet.getLong("chatid"),
-                        resultSet.getBoolean("enabled")
+                        resultSet.getBoolean("enabled_for_users"),
+                        resultSet.getBoolean("enabled_for_friends")
                 );
                 return notificationConfig;
             } else return null;
@@ -162,12 +182,13 @@ public class DBManager extends ConnectBot {
 
     public void addFriend(Friend friend, Long ownerChatId) throws SQLException {
         dbConnector.handleQuery((Connection conn) -> {
-            String insertFriend = "INSERT INTO friends(owner_chatid, firstName, lastName, birth) VALUES (?, ?, ?, ?)";
+            String insertFriend = "INSERT INTO friends(owner_chatid, role, firstName, lastName, birth) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement preparedStatement = conn.prepareStatement(insertFriend);
             preparedStatement.setLong(1, ownerChatId);
-            preparedStatement.setString(2, friend.getFirstName());
-            preparedStatement.setString(3, friend.getLastName());
-            preparedStatement.setObject(4, Date.valueOf(friend.getBirthday()));
+            preparedStatement.setString(2, friend.getRole());
+            preparedStatement.setString(3, friend.getFirstName());
+            preparedStatement.setString(4, friend.getLastName());
+            preparedStatement.setObject(5, Date.valueOf(friend.getBirthday()));
             preparedStatement.executeUpdate();
         });
     }
@@ -189,8 +210,77 @@ public class DBManager extends ConnectBot {
         });
     }
 
+    public List<Friend> getAllFriends(Long ownerChatId) {
+        return dbConnector.handleQuery((Connection conn) -> {
+            String sqlQuery = "SELECT f.id, f.firstName, f.lastName, f.role, f.birth " +
+                    "FROM friends f " +
+                    "WHERE f.owner_chatid = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, ownerChatId);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Friend> friendsList = new ArrayList<>();
+            while (rs.next()) {
+                Friend friend = new Friend(
+                        rs.getLong("id"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("role"),
+                        rs.getObject("birth", LocalDate.class)
 
+                );
+                friendsList.add(friend);
+            }
+            return friendsList;
+        });
 
+    }
 
+    public List<Friend> getAllFriendsWithEnabled(boolean enable) {
+        return dbConnector.handleQuery((Connection conn) -> {
+            String sqlQuery = "SELECT f.owner_chatid, f.role, f.firstname, f.lastname, f.birth " +
+                    "FROM friends f " +
+                    "INNER JOIN notification_setting n ON f.owner_chatid = n.chatid " +
+                    "WHERE n.enabled_for_friends = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setBoolean(1, enable);
+            ResultSet rs = preparedStatement.executeQuery();
+            List<Friend> friendsList = new ArrayList<>();
+            while (rs.next()) {
+                Friend friend = new Friend(
+                        rs.getLong("owner_chatid"),
+                        rs.getString("firstname"),
+                        rs.getString("lastname"),
+                        rs.getString("role"),
+                        rs.getObject("birth", LocalDate.class)
+
+                );
+                friendsList.add(friend);
+            }
+            return friendsList;
+
+        });
+
+    }
+
+    public void deleteFriendById(Long id) throws SQLException {
+        dbConnector.handleQuery((Connection conn) -> {
+            String sqlQuery = "DELETE FROM friends WHERE id = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        });
+    }
+
+    public boolean isFriendOwnedByUser(Long friendId, Long ownerChatId) {
+        return dbConnector.handleQuery((Connection conn) -> {
+            String sqlQuery = "SELECT COUNT(*) FROM friends WHERE id = ? AND owner_chatid = ?";
+            PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
+            preparedStatement.setLong(1, friendId);
+            preparedStatement.setLong(2, ownerChatId);
+            ResultSet rs = preparedStatement.executeQuery();
+            rs.next();
+            return rs.getInt(1) > 0;
+        });
+    }
 
 }

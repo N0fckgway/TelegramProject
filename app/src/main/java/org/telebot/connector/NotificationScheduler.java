@@ -1,5 +1,6 @@
 package org.telebot.connector;
 
+import org.telebot.data.Friend;
 import org.telebot.data.User;
 import org.telebot.data.database.DBConnector;
 import org.telebot.data.database.DBManager;
@@ -40,6 +41,7 @@ public class NotificationScheduler extends ConnectBot {
         scheduler.schedule(
                 () -> {
                     sendDailyNotifications();
+                    sendBirthdayNotificationForFriends();
                     scheduleDailyNotification();
                 },
                 initialDelay,
@@ -47,8 +49,12 @@ public class NotificationScheduler extends ConnectBot {
         );
     }
 
-    public void changeButtonStatus(Boolean enable, Long chatId) {
+    public void changeButtonStatusUser(Boolean enable, Long chatId) {
         dbManager.updateEnableUser(enable, chatId);
+    }
+
+    public void changeButtonStatusFriend(Boolean enable, Long chatId) {
+        dbManager.updateEnableFriend(enable, chatId);
     }
 
     private long getNextRunTime(int hour, int minute) {
@@ -68,6 +74,7 @@ public class NotificationScheduler extends ConnectBot {
             for (User user : users) {
                 if (user.getBirthday() != null) {
                     sendBirthdayNotification(user);
+
                 }
             }
         } catch (Exception e) {
@@ -93,6 +100,74 @@ public class NotificationScheduler extends ConnectBot {
             System.out.println("Ошибка отправки уведомления: " + e.getMessage());
         }
     }
+
+    private void sendBirthdayNotificationForFriends() {
+        try {
+            List<User> users = dbManager.getAllUsersWithEnabled(true);
+            for (User user : users) {
+                List<Friend> friends = dbManager.getAllFriendsWithEnabled(true);
+                for (Friend friend : friends) {
+                    if (friend.getBirthday() != null) {
+                        sendFriendBirthdayNotification(user, friend);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка при отправке уведомлений о друзьях: " + e.getMessage());
+
+        }
+    }
+
+    private void sendFriendBirthdayNotification(User user, Friend friend) {
+        try {
+            long daysUntil = daysUntilBirthday(friend.getBirthday());
+
+
+            if (daysUntil == 7 || daysUntil == 1) {
+                String message = createFriendBirthdayMessage(user, friend, daysUntil);
+
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.setChatId(String.valueOf(user.getChatId()));
+                sendMessage.setText(message);
+                sendMessage.setParseMode(ParseMode.HTML);
+
+                execute(sendMessage);
+                System.out.println("Отправлено уведомление о друге " + friend.getFirstName() +
+                        " пользователю " + user.getChatId() + " (осталось дней: " + daysUntil + ")");
+            }
+        } catch (Exception e) {
+            System.out.println("Ошибка отправки уведомления о друге: " + e.getMessage());
+        }
+    }
+
+    private String createFriendBirthdayMessage(User user, Friend friend, long daysUntil) {
+        String friendName = friend.getFirstName();
+        if (friend.getLastName() != null) {
+            friendName += " " + friend.getLastName();
+        }
+        String userName = user.getFirstName() != null ? user.getFirstName() : "пользователь";
+
+        if (daysUntil == 7) {
+            return "🧑‍🧒 <b>Напоминание о дне рождения друга</b>\n\n" +
+                    "Привет, " + userName + "!\n\n" +
+                    "У вашего друга <b>" + friendName + "</b> (" + friend.getRole() + ") " +
+                    "через <b>7 дней</b> день рождения! 🎉\n\n" +
+                    "🎂 Дата: " + friend.getBirthday().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "\n" +
+                    "🏷️ Роль: " + friend.getRole() + "\n\n" +
+                    "Не забудьте подготовить поздравление! 🎁";
+        } else if (daysUntil == 1) {
+            return "🚨 <b>СРОЧНОЕ НАПОМИНАНИЕ!</b>\n\n" +
+                    "Привет, " + user.getFirstName() + "!\n\n" +
+                    "У вашего друга <b>" + friendName + "</b> (" + friend.getRole() + ") " +
+                    "<b>ЗАВТРА</b> день рождения! 🎉\n\n" +
+                    "🎂 Дата: " + friend.getBirthday().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "\n" +
+                    "🏷️ Роль: " + friend.getRole() + "\n\n" +
+                    "Пора поздравлять! 🎁✨";
+        }
+
+        return "";
+    }
+
 
     private long daysUntilBirthday(LocalDate birthday) {
         LocalDate today = LocalDate.now();

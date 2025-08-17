@@ -17,15 +17,14 @@ public class NoButton extends ConnectBot implements ExecuteButton {
     public void applyButton(Update update) {
         DBConnector dbConnector = new DBConnector();
         DBManager dbManager = new DBManager(dbConnector);
-        /// по возможности как то видоизменить этот кусок
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
         String text = "✅Выключили каждодневные уведомления!";
         NotificationScheduler notificationScheduler = new NotificationScheduler();
-        if (!dbManager.getNotificationConfigById(chatId).getEnabled()) {
+        if (!dbManager.getNotificationConfigById(chatId).getEnabledForUsers()) {
             sendMessage(chatId, "🤓Уведомления уже выключены!");
             return;
         }
-        notificationScheduler.changeButtonStatus(false, chatId);
+        notificationScheduler.changeButtonStatusUser(false, chatId);
         sendMessage(chatId, text);
 
 

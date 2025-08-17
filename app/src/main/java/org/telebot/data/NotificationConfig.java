@@ -11,11 +11,13 @@ import java.time.LocalDate;
 public class NotificationConfig {
 
     private Long chatId;
+    private Boolean enabledForUsers;
+    private Boolean enabledForFriends;
 
-    private Boolean enabled;
 
-    public NotificationConfig(Long chatId, Boolean enabled) {
+    public NotificationConfig(Long chatId, Boolean enabledForUsers, Boolean enabledForFriends) {
         this.chatId = chatId;
-        this.enabled = enabled;
+        this.enabledForUsers = enabledForUsers;
+        this.enabledForFriends = enabledForFriends;
     }
 }

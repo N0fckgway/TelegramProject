@@ -68,7 +68,7 @@ public class CalendarHandler extends ConnectBot implements ExecuteButton {
                 int calculatedAge = Period.between(birthday, LocalDate.now()).getYears();
                 tempUser.setAge(calculatedAge);
 
-                NotificationConfig notificationConfig = new NotificationConfig(tempUser.getChatId(), true);
+                NotificationConfig notificationConfig = new NotificationConfig(tempUser.getChatId(), true, true);
 
                 DBConnector dbConnector = new DBConnector();
                 DBManager dbManager = new DBManager(dbConnector);

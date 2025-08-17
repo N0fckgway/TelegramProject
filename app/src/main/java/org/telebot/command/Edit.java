@@ -5,10 +5,10 @@ import lombok.Setter;
 import org.telebot.command.runner.Command;
 
 @Setter
-public class Edit {
+public class Edit  {
     private Command command;
 
     public Command getCommand() {
-        return new Command("/edit", "Изменить данные о человеке!");
+        return new Command("/edit - в следующем обновлении будет реализована функция", "Изменить данные о человеке!");
     }
 }

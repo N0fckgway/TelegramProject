@@ -91,7 +91,8 @@ public class DBConnector implements DBConnectable {
         statement.execute("CREATE TABLE IF NOT EXISTS notification_setting" +
                 "(" +
                 "chatid BIGINT PRIMARY KEY REFERENCES users(chatid)," +
-                "enabled BOOLEAN DEFAULT true" +
+                "enabled_for_users BOOLEAN DEFAULT true," +
+                "enabled_for_friends BOOLEAN DEFAULT true" +
                 ")"
         );
 
@@ -99,6 +100,7 @@ public class DBConnector implements DBConnectable {
                 "(" +
                 "id BIGINT NOT NULL PRIMARY KEY DEFAULT NEXTVAL('friend_id_seq')," +
                 "owner_chatid BIGINT NOT NULL REFERENCES users(chatid)," +
+                "role VARCHAR(64) NOT NULL CHECK(role<>'')," +
                 "firstName VARCHAR(255) NOT NULL CHECK(firstName<>'')," +
                 "lastName VARCHAR(255) NOT NULL CHECK(lastName<>'')," +
                 "birth DATE NOT NULL," +

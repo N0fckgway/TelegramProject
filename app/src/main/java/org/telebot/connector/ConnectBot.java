@@ -6,6 +6,7 @@ package org.telebot.connector;
 import lombok.Getter;
 import org.telebot.buttons.SendContact;
 import org.telebot.command.Add;
+import org.telebot.command.Delete;
 import org.telebot.command.Help;
 import org.telebot.command.interfaces.ExecuteButton;
 import org.telebot.command.runner.Runner;
@@ -84,9 +85,17 @@ public class ConnectBot extends TelegramLongPollingBot {
             } else {
                 Long chatId = update.getMessage().getChatId();
                 Add addCommand = new Add();
-                if (addCommand.isUserInAddProcess(chatId)) {
+
+                if (Add.isUserInAddProcess(chatId)) {
                     addCommand.apply(update);
-                } else return;
+                    return;
+                }
+                Delete deleteCommand = new Delete();
+                if (Delete.isUserInDeleteProcess(chatId)) {
+                    deleteCommand.apply(update);
+                    return;
+                }
+                return;
             }
 
         } else if (update.hasCallbackQuery()) {

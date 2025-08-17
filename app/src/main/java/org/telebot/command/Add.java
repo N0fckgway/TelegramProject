@@ -1,7 +1,6 @@
 package org.telebot.command;
 
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.telebot.command.interfaces.ExecuteCommand;
 import org.telebot.command.runner.Command;
 import org.telebot.connector.ConnectBot;
@@ -52,6 +51,7 @@ public class Add extends ConnectBot implements ExecuteCommand {
         switch (currentStep) {
             case WAITING_NAME -> handleFullName(chatId, text);
             case WAITING_BIRTH -> handleBirth(chatId, text);
+            case WAITING_ROLE -> handleRole(chatId, text, update);
         }
 
     }
@@ -74,43 +74,66 @@ public class Add extends ConnectBot implements ExecuteCommand {
                 stepAdd.remove(chatId);
                 stepAdd.put(chatId, StepAdd.WAITING_BIRTH);
                 sendMessage(chatId, "Отлично! Фамилия и имя были добавлены в мою память!");
-                sendMessage(chatId, "Теперь отправь дату рождения в формате ДД.ММ.ГГГГ");
+                sendMessage(chatId, "<strong>Теперь отправь дату рождения в формате ДД.ММ.ГГГГ</strong>");
 
             } else sendMessage(chatId, "Ошибка! Неверный формат фамилии и имени. Попробуйте еще раз!");
-        } else sendMessage(chatId, "Ошибка! Мы не видим вашего фамилии и имени!");
+        } else sendMessage(chatId, "Ошибка! Мы не видим вашего фамилии и имени! \n" +
+                "Введите фамилию и имя еще раз!");
     }
 
     private void handleBirth(Long chatId, String text) {
         try {
             if (textParser.hasDate(text)) {
-                DBManager dbManager = new DBManager(new DBConnector());
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate birth = LocalDate.parse(text, formatter);
 
                 Friend friend = tempFriend.get(chatId);
                 friend.setBirthday(birth);
-
-                dbManager.addFriend(friend, chatId);
-                Long friendId = dbManager.getFriendId(chatId);
-                friend.setId(friendId);
-
-                sendMessage(chatId, "Друг успешно добавлен! ✅\n" +
-                        "Id:" + friend.getId() + "\n" +
-                        "Имя: " + friend.getFirstName() + "\n" +
-                        "Фамилия: " + friend.getLastName() + "\n" +
-                        "Дата рождения: " + friend.getBirthday().format(formatter));
-
-
-
-                tempFriend.remove(chatId);
                 stepAdd.remove(chatId);
+                stepAdd.put(chatId, StepAdd.WAITING_ROLE);
+                sendMessage(chatId, "✅Отлично! Дата рождения была добавлена в мою память!");
+                sendMessage(chatId, "<strong>Теперь укажите кем вам является этот человек!</strong>");
             } else sendMessage(chatId, "Ошибка! Неверный формат даты! Используйте формат ДД.ММ.ГГГГ");
 
         } catch (DateTimeException e) {
             sendMessage(chatId, "Ошибка! Неверный формат даты рождения! Попробуйте еще раз!");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
+    }
+
+    private void handleRole(Long chatId, String role, Update update) {
+        Friend friend = tempFriend.get(chatId);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        DBManager dbManager = new DBManager(new DBConnector());
+        Help help = new Help();
+        Registration registration = new Registration();
+        if (textParser.hasRole(role)) {
+            String roleFriend = textParser.parseRoleFriend(role);
+            friend.setRole(roleFriend);
+            if (dbManager.checkUserExisting(chatId)) {
+                try {
+                    dbManager.addFriend(friend, chatId);
+                    friend.setId(dbManager.getFriendId(chatId));
+                    sendMessage(chatId, "Друг успешно добавлен! ✅\n" +
+                            "Id:" + friend.getId() + "\n" +
+                            "Имя: " + friend.getFirstName() + "\n" +
+                            "Фамилия: " + friend.getLastName() + "\n" +
+                            "Дата рождения: " + friend.getBirthday().format(formatter) + "\n" +
+                            "Роль: " + friend.getRole()
+                    );
+                    stepAdd.remove(chatId);
+                    tempFriend.remove(chatId);
+                    help.apply(update);
+                } catch (SQLException e) {
+                    sendMessage(chatId, "❌Ошибка добавления друга в базу данных! Повторите попытку позже!");
+                }
+            } else {
+                sendMessage(chatId, "Добавлять друзей вы сможете только после прохождения регистрации!");
+                registration.apply(update);
+            }
+
+
+        }
+
     }
 
     private void sendMessage(Long chatId, String text) {

@@ -16,8 +16,13 @@ public class TextParser {
 
     }
 
-    public Boolean hasUserName(String text) {
-        return text.charAt(0) == '@';
+    public Boolean hasRole(String text) {
+        String roleRegex = "^[а-яёА-ЯЁ]+(\\s+[а-яёА-ЯЁ]+)*$";
+        return text.trim().matches(roleRegex);
+    }
+
+    public String parseRoleFriend(String text) {
+        return text.trim().replaceAll("\\s+", " ");
     }
 
     public Boolean hasDate(String text) {
