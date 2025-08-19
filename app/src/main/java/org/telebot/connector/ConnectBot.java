@@ -36,7 +36,7 @@ public class ConnectBot extends TelegramLongPollingBot {
     public void setBot() throws IOException {
         log.info("Настройка конфигурации бота...");
         Properties properties = new Properties();
-        try (InputStream inputStream = Files.newInputStream(Paths.get("../app/src/main/resources/properties/apiBot.properties"))) {
+        try (InputStream inputStream = Files.newInputStream(Paths.get("app/src/main/resources/properties/apiBot.properties"))) {
             properties.load(inputStream);
             log.debug("Файл конфигурации загружен успешно");
         } catch (IOException e) {
@@ -100,7 +100,12 @@ public class ConnectBot extends TelegramLongPollingBot {
                     return;
                 }
                 log.debug("Сообщение от пользователя {} не обработано (не в процессе)", chatId);
-                return;
+
+                if (textParser.hasText(text)) {
+                    log.error("Пользователь {} ввел не корректную команду!", chatId);
+                    sendMessageOfMistake("<strong>Такой команды не существует!</strong>\nСписок команд можно посмотреть здесь - /help", update);
+                }
+
             }
         } else if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
@@ -133,7 +138,7 @@ public class ConnectBot extends TelegramLongPollingBot {
         runner.registrationCommands();
         if (!runner.commands.containsKey(message)) {
             log.warn("Команда '{}' не найдена для пользователя {}", message, chatId);
-            String response = "<strong>Таккой команды не существует!</strong>\nСписок команд можно посмотреть здесь - /help";
+            String response = "<strong>Такой команды не существует!</strong>\nСписок команд можно посмотреть здесь - /help";
             sendMessageOfMistake(response, update);
         }
         if (runner.commands.get(message) != null) {

@@ -5,11 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="154ffff4-1248-4d04-80f5-f204dfa9e39c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/Friends.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/NoButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/NoButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/Friends.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/buttons/Friends.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Add.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Add.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Delete.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Delete.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Edit.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/command/Edit.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/ConnectBot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/NotificationScheduler.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/connector/NotificationScheduler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBConnector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBConnector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/database/DBManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/parser/TextParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/org/telebot/data/parser/TextParser.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,10 +29,10 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Enum" />
         <option value="Exception" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -123,6 +128,14 @@
       <workItem from="1755040916660" duration="20479000" />
       <workItem from="1755199887488" duration="3019000" />
       <workItem from="1755354908468" duration="1913000" />
+      <workItem from="1755468405226" duration="4657000" />
+      <workItem from="1755532413906" duration="7000" />
+      <workItem from="1755532428324" duration="271000" />
+      <workItem from="1755532706687" duration="4444000" />
+      <workItem from="1755545899023" duration="2725000" />
+      <workItem from="1755613687875" duration="9476000" />
+      <workItem from="1755632640161" duration="37000" />
+      <workItem from="1755632682292" duration="2272000" />
     </task>
     <servers />
   </component>

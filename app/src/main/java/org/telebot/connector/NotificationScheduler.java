@@ -8,12 +8,10 @@ import org.telebot.data.database.DBManager;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
-import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,6 +32,7 @@ public class NotificationScheduler extends ConnectBot {
     }
 
     private void startScheduler() {
+
         log.info("Запуск планировщика уведомлений...");
         scheduler = Executors.newScheduledThreadPool(1);
         scheduleDailyNotification();
@@ -138,9 +137,9 @@ public class NotificationScheduler extends ConnectBot {
 
     private void sendBirthdayNotificationForFriends() {
         try {
-            List<User> users = dbManager.getAllUsersWithEnabled(true);
+            List<User> users = dbManager.getAllUsers();
             for (User user : users) {
-                List<Friend> friends = dbManager.getAllFriendsWithEnabled(true);
+                List<Friend> friends = dbManager.getAllFriendsWithEnabled(true, user.getChatId());
                 for (Friend friend : friends) {
                     if (friend.getBirthday() != null) {
                         sendFriendBirthdayNotification(user, friend);

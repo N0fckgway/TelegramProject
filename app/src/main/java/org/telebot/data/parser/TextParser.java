@@ -11,9 +11,14 @@ public class TextParser {
     }
 
     public Boolean hasFullName(String text) {
-        String fullNameRegex = "^[А-ЯЁ][а-яё]+\\s+[А-ЯЁ][а-яё]+$";
+        String fullNameRegex = "^[А-ЯЁ][а-яё-]+\\s+[А-ЯЁ][а-яё-]+$";
         return text.trim().matches(fullNameRegex);
 
+    }
+
+    public Boolean hasText(String text) {
+        String regex = "^\\p{L}+(?:[ \\-’']\\p{L}+)*$";
+        return text.trim().matches(regex);
     }
 
     public Boolean hasRole(String text) {

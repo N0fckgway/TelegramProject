@@ -80,7 +80,7 @@ public class Delete extends ConnectBot implements ExecuteCommand {
                 sendMessage(chatId, "✅ Друг успешно удален!");
                 step.remove(chatId);
             } else {
-                sendMessage(chatId, "❌ Друга с таким ID не найдено или он не принадлежит вам!");
+                sendMessage(chatId, "❌ Друга с таким ID не найдено или он не принадлежит ему!");
             }
 
         } catch (SQLException e) {

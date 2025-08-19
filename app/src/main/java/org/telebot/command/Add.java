@@ -4,6 +4,7 @@ import lombok.Setter;
 import org.telebot.command.interfaces.ExecuteCommand;
 import org.telebot.command.runner.Command;
 import org.telebot.connector.ConnectBot;
+import org.telebot.data.EnumFullName;
 import org.telebot.data.Friend;
 import org.telebot.data.StepAdd;
 import org.telebot.data.database.DBConnector;
@@ -60,7 +61,7 @@ public class Add extends ConnectBot implements ExecuteCommand {
         stepAdd.put(chatId, StepAdd.WAITING_NAME);
         tempFriend.put(chatId, new Friend());
         sendMessage(chatId, "Переходим в опцию добавления друзей");
-        sendMessage(chatId, "Отправь мне фамилию и имя друга");
+        sendMessage(chatId, "<strong>Отправь мне фамилию и имя своего друга!</strong>");
 
     }
 
@@ -74,7 +75,7 @@ public class Add extends ConnectBot implements ExecuteCommand {
                 stepAdd.remove(chatId);
                 stepAdd.put(chatId, StepAdd.WAITING_BIRTH);
                 sendMessage(chatId, "Отлично! Фамилия и имя были добавлены в мою память!");
-                sendMessage(chatId, "<strong>Теперь отправь дату рождения в формате ДД.ММ.ГГГГ</strong>");
+                sendMessage(chatId, "<strong>Теперь отправь дату рождения в формате ДД.ММ.ГГГГ(1925 - по н.в)!</strong>");
 
             } else sendMessage(chatId, "Ошибка! Неверный формат фамилии и имени. Попробуйте еще раз!");
         } else sendMessage(chatId, "Ошибка! Мы не видим вашего фамилии и имени! \n" +
@@ -87,16 +88,23 @@ public class Add extends ConnectBot implements ExecuteCommand {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                 LocalDate birth = LocalDate.parse(text, formatter);
 
+
+                if (birth.getYear() < 1925 || birth.isAfter(LocalDate.now())) {
+                    sendMessage(chatId, "<strong>Ошибка!<strong> Повторюсь год должен входить в такие временные рамки 1925 - н.в! " +
+                            "\n" +
+                            "Повтори ввод!");
+                    return;
+                }
                 Friend friend = tempFriend.get(chatId);
                 friend.setBirthday(birth);
                 stepAdd.remove(chatId);
                 stepAdd.put(chatId, StepAdd.WAITING_ROLE);
                 sendMessage(chatId, "✅Отлично! Дата рождения была добавлена в мою память!");
                 sendMessage(chatId, "<strong>Теперь укажите кем вам является этот человек!</strong>");
-            } else sendMessage(chatId, "Ошибка! Неверный формат даты! Используйте формат ДД.ММ.ГГГГ");
+            } else sendMessage(chatId, "<strong>Ошибка!</strong> Неверный формат даты! Используйте формат ДД.ММ.ГГГГ");
 
         } catch (DateTimeException e) {
-            sendMessage(chatId, "Ошибка! Неверный формат даты рождения! Попробуйте еще раз!");
+            sendMessage(chatId, "<strong>Ошибка!</strong> Неверный формат даты рождения! Попробуйте еще раз!");
         }
     }
 
@@ -113,12 +121,12 @@ public class Add extends ConnectBot implements ExecuteCommand {
                 try {
                     dbManager.addFriend(friend, chatId);
                     friend.setId(dbManager.getFriendId(chatId));
-                    sendMessage(chatId, "Друг успешно добавлен! ✅\n" +
-                            "Id:" + friend.getId() + "\n" +
-                            "Имя: " + friend.getFirstName() + "\n" +
-                            "Фамилия: " + friend.getLastName() + "\n" +
-                            "Дата рождения: " + friend.getBirthday().format(formatter) + "\n" +
-                            "Роль: " + friend.getRole()
+                    sendMessage(chatId, "<strong>Друг успешно добавлен! ✅</strong>\n" +
+                            "Id:" + "<strong>" + friend.getId() + "</strong>" + "\n" +
+                            "Имя: " + "<strong>" + friend.getFirstName() + "</strong>" + "\n" +
+                            "Фамилия: " + "<strong>" + friend.getLastName() + "</strong>" + "\n" +
+                            "Дата рождения: " + "<strong>" + friend.getBirthday().format(formatter) + "</strong>" + "\n" +
+                            "Роль: " + "<strong>" + friend.getRole() + "</strong>"
                     );
                     stepAdd.remove(chatId);
                     tempFriend.remove(chatId);
@@ -131,7 +139,8 @@ public class Add extends ConnectBot implements ExecuteCommand {
                 registration.apply(update);
             }
 
-
+        } else {
+            sendMessage(chatId, "Разрешена только <strong>кириллица!<strong>");
         }
 
     }

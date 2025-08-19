@@ -43,7 +43,7 @@ public class DBConnector implements DBConnectable {
         log.debug("Попытка подключения к базе данных...");
         Properties properties = new Properties();
 
-        try (InputStream inputStream = Files.newInputStream(Paths.get("../app/src/main/resources/properties/apiBot.properties"))){
+        try (InputStream inputStream = Files.newInputStream(Paths.get("app/src/main/resources/properties/apiBot.properties"))){
             properties.load(inputStream);
             log.debug("Конфигурация БД загружена из файла");
         } catch (IOException e) {

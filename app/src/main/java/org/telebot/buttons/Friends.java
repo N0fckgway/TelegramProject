@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,10 +37,10 @@ public class Friends extends ConnectBot implements ExecuteButton {
            for (int i = 0; i < friendsList.size(); i++) {
                Friend friend = friendsList.get(i);
                stringBuilder.append(" 👤 <strong>").append(i + 1).append(".</strong> ");
-               stringBuilder.append(friend.getFirstName()).append(" ").append(friend.getLastName()).append("\n");
-               stringBuilder.append(" 🍰 Дата рождения: ").append(friend.getBirthday().format(java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy"))).append("\n");
-               stringBuilder.append(" 🧑‍🧒 Роль: ").append(friend.getRole()).append("\n");
-               stringBuilder.append(" 🆔 ID: ").append(friend.getId()).append("\n\n");
+               stringBuilder.append("<strong>" + friend.getFirstName() + "</strong>").append(" ").append("<strong>" + friend.getLastName() + "</strong>").append("\n");
+               stringBuilder.append(" 🍰 Дата рождения: ").append("<strong>" + friend.getBirthday().format(DateTimeFormatter.ofPattern("dd.MM.yyyy")) + "</strong>").append("\n");
+               stringBuilder.append(" 🧑‍🧒 Роль: ").append("<strong>" + friend.getRole() + "</strong>").append("\n");
+               stringBuilder.append(" 🆔 ID: ").append("<strong>" + friend.getId() + "</strong>").append("\n\n");
            }
            sendMessage(chatId, stringBuilder.toString());
 

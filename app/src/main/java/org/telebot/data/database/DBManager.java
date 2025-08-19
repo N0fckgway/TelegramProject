@@ -298,18 +298,19 @@ public class DBManager extends ConnectBot {
         });
     }
 
-    public List<Friend> getAllFriendsWithEnabled(boolean enable) {
+    public List<Friend> getAllFriendsWithEnabled(boolean enable, Long ownerChatId) {
         log.debug("Получение друзей с включенными уведомлениями: enabled={}", enable);
         
         return dbConnector.handleQuery((Connection conn) -> {
             String sqlQuery = "SELECT f.owner_chatid, f.role, f.firstname, f.lastname, f.birth " +
                     "FROM friends f " +
                     "INNER JOIN notification_setting n ON f.owner_chatid = n.chatid " +
-                    "WHERE n.enabled_for_friends = ?";
+                    "WHERE n.enabled_for_friends = ? AND f.owner_chatid = ?";
             log.debug("SQL запрос: {}", sqlQuery);
             
             PreparedStatement preparedStatement = conn.prepareStatement(sqlQuery);
             preparedStatement.setBoolean(1, enable);
+            preparedStatement.setLong(2, ownerChatId);
             ResultSet rs = preparedStatement.executeQuery();
             
             List<Friend> friendsList = new ArrayList<>();
@@ -362,6 +363,36 @@ public class DBManager extends ConnectBot {
             
             log.debug("Друг {} принадлежит пользователю {}: {}", friendId, ownerChatId, isOwned);
             return isOwned;
+        });
+    }
+
+    public List<User> getAllUsers() {
+        log.debug("Получение пользователей с включенными уведомлениями:");
+
+        return dbConnector.handleQuery((Connection conn) ->  {
+            Statement statement = conn.createStatement();
+            String sqlQuery = "SELECT u.chatid, u.firstName, u.lastName, u.username, u.phonenumber, u.birth, u.age " +
+                    "FROM users u ";
+            log.debug("SQL запрос: {}", sqlQuery);
+
+            ResultSet rs = statement.executeQuery(sqlQuery);
+
+            List<User> users = new ArrayList<>();
+            while (rs.next()) {
+                User user = new User(
+                        rs.getLong("chatid"),
+                        rs.getString("firstName"),
+                        rs.getString("lastName"),
+                        rs.getString("username"),
+                        rs.getString("phonenumber"),
+                        rs.getObject("birth", LocalDate.class)
+                );
+                user.setAge(rs.getInt("age"));
+                users.add(user);
+            }
+
+
+            return users;
         });
     }
 }
